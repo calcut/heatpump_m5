@@ -12,8 +12,67 @@
 */
 #include <M5Core2.h>
 #include <Notecard.h>
+#include "NotecardEnvVarManager.h"
+
+// 5 second timeout for retrying the hub.set request.
+#define HUB_SET_RETRY_SECONDS 5
+// Fetch every 20 seconds.
+#define FETCH_INTERVAL_MS (20 * 1000)
+
+// A struct to cache the values of environment variables.
+typedef struct {
+    char valueA[16];
+    char valueB[16];
+    char valueC[16];
+} EnvVarCache;
+
+// These are the environment variables we'll be fetching from the Notecard.
+const char *envVars[] = {
+    "variable_a",
+    "variable_b",
+    "variable_c"
+};
+static const size_t numEnvVars = sizeof(envVars) / sizeof(envVars[0]);
+
+
+void envVarManagerCb(const char *var, const char *val, void *userCtx)
+{
+    // Cast the userCtx to the appropriate type.
+    EnvVarCache *cache = (EnvVarCache *)userCtx;
+
+    Serial.print("\nCallback received variable \"");
+    Serial.print(var);
+    Serial.print("\" with value \"");
+    Serial.print(val);
+    Serial.print("\" and context 0x");
+    Serial.print((unsigned long)userCtx, HEX);
+    Serial.println(".");
+
+    // Cache the values for each variable.
+    if (strcmp(var, "variable_a") == 0) {
+        strlcpy(cache->valueA, val, sizeof(cache->valueA));
+    }
+    else if (strcmp(var, "variable_b") == 0) {
+        strlcpy(cache->valueB, val, sizeof(cache->valueB));
+    }
+    else if (strcmp(var, "variable_c") == 0) {
+        strlcpy(cache->valueC, val, sizeof(cache->valueC));
+    }
+
+    Serial.println("Cached values:");
+    Serial.print("- variable_a has value ");
+    Serial.println(envVarCache.valueA);
+    Serial.print("- variable_b has value ");
+    Serial.println(envVarCache.valueB);
+    Serial.print("- variable_c has value ");
+    Serial.println(envVarCache.valueC);
+}
 
 Notecard notecard;
+NotecardEnvVarManager *manager = NotecardEnvVarManager_alloc();
+uint32_t lastFetchMs = 0;
+EnvVarCache envVarCache;
+
 #define productUID "com.your-company.your-name:your_product"
 
 /* After M5Core2 is started or reset
@@ -101,5 +160,17 @@ void loop() {
     M5.Lcd.setCursor(0, 0);
   }
 
-  M5.update();  //Read the press state of the key.  读取按键 A, B, C 的状态
+    M5.update();  //Read the press state of the key.  读取按键 A, B, C 的状态
+
+    // Fetch the environment variables every FETCH_INTERVAL_MS milliseconds.
+    unsigned long currentMs = millis();
+    if (currentMs - lastFetchMs >= FETCH_INTERVAL_MS) {
+        lastFetchMs = currentMs;
+        notecard.logDebug("Fetch interval lapsed. Fetching environment "
+        "variables...\n");
+        if (NotecardEnvVarManager_fetch(manager, envVars, numEnvVars)
+            != NEVM_SUCCESS) {
+            Serial.println("NotecardEnvVarManager_fetch failed.");
+        }
+    }
 }
