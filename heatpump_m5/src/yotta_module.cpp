@@ -24,7 +24,7 @@ void YottaModule::readTC_float(float_t tc[8]) {
 
             // Convert to float and print
             memcpy(&tc[i], &byte_array, 4);
-            Serial.print("Temperature: ");
+            Serial.printf("TC[%i]: ", i);
             Serial.println(tc[i]);
         }
     }
@@ -91,7 +91,7 @@ void YottaModule::getModuleName(){
     Serial.println("Reading module name");
 
     if (ModbusRTUClient.requestFrom(slave_id, HOLDING_REGISTERS,
-                                210, 1)) {
+                                MODULE_NAME_ADDR, 1)) {
         Serial.print("Module Detected: A-");
         while (ModbusRTUClient.available()) {
             Serial.print(ModbusRTUClient.read(), HEX);

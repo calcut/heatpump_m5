@@ -1,6 +1,8 @@
 #ifndef YOTTA_MODULE_H
 #define YOTTA_MODULE_H
 
+#define MODULE_NAME_ADDR 211
+
 #include <Arduino.h>
 #include <ArduinoModbus.h>
 
