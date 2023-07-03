@@ -1,0 +1,17 @@
+
+ESP32-DOWDQ6
+
+ESP32(pin)       MBUS               NotecarrierB    Colour
+U0TXD(41)       G1/TXD0(14)         AUXRX           Green
+U0RXD(40)       G3/RXD0(13)         AUXTX           White
+GPIO0(23)       G0(24)              AUX3            Blue
+CHIP_PU(9)      EN/RST(6)           AUX4            Yellow
+BUS_5V          5V(28)              VMAIN           Red
+GND             GND                 GND             Black
+GPIO32(12)      G32/EXT_SDA(19)     SDA             
+GPIO33(13)      G33/EXT_SCL(20)     SCL
+
+OR
+
+GPIO21(39)      G21/SYS_SDA(17)     SDA             Blue
+GPIO22(36)      G22/SYS_SCL(18)     SCL             Yellow
