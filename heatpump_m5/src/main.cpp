@@ -24,7 +24,6 @@ NotecardManager notecardManager;
 YottaModule yottaModule(YOTTA_MODULE_ID);
 
 uint32_t currentMs = millis();
-uint32_t last_ui_upd = 0;
 uint32_t last_modbus_poll = 0;
 
 
@@ -38,8 +37,8 @@ void setup() {
     init_touch_driver();
     ui_init();
 
-    // notecardManager.hubSet();
-    // yottaModule.getModuleName();
+    notecardManager.hubSet();
+    yottaModule.getModuleName();
 
     Serial.println( "Setup done" );
 }
@@ -61,7 +60,6 @@ void loop(){
     lv_task_handler();
     app.tick();
     currentMs = millis();
-    lv_tick_inc(currentMs - last_ui_upd); // Should be in an ISR
-    last_ui_upd = currentMs;
+
 
 }
