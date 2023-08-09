@@ -4,36 +4,46 @@
 #include <Arduino.h>
 #include <Notecard.h>
 #include "NotecardEnvVarManager.h"
-
-// 5 second timeout for retrying the hub.set request.
-#define HUB_SET_RETRY_SECONDS 5
-// Fetch every 20 seconds.
-#define FETCH_INTERVAL_MS (10 * 1000)
-
-#define productUID "dwt.ac.uk.heatpump"
+#include <ArduinoJson.h>
 
 // A struct to cache the values of environment variables.
 typedef struct {
-    char valueA[16];
-    char valueB[16];
-    char valueC[16];
+    char serial_number[32];
+    char string_a[16] = "example_string";
+    int mode = 0;
+    float set_point = 20.0;
+    float comp_speed_max = 100.0;
+    float comp_speed_min = 0.0;
+    float fan_speed_max = 100.0;
+    float fan_speed_min = 0.0;
+    float pump_speed_max = 100.0;
+    float pump_speed_min = 0.0;
+
 } EnvVarCache;
 
+
 void envVarManagerCb(const char *var, const char *val, void *userCtx);
+
 
 class NotecardManager {
 
     private:
-        EnvVarCache envVarCache;
         Notecard notecard;
         NotecardEnvVarManager *envVarManager = NULL;
-        uint32_t lastFetchMs = 0;
-        uint32_t currentMs = millis();
-
+        uint32_t env_modified_time = 0;
+        
     public:
         NotecardManager();
-        void hubSet();
+        void init(const char *uid, const char *mode, int inbound, int outbound, bool sync);
         void cardStatus();
-        void service(int fetch_interval_ms);
+        void cardWireless();
+        void getEnvironment();
+        void setDefaultEnvironment();
+        void service();
+        EnvVarCache envVarCache;
+        bool connected;
+        int bars;
+
+
 };
 #endif

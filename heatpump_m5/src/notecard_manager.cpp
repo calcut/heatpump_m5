@@ -1,12 +1,5 @@
 #include "notecard_manager.h"
 
-const char *envVars[] = {
-    "variable_a",
-    "variable_b",
-    "variable_c"
-};
-static const size_t numEnvVars = sizeof(envVars) / sizeof(envVars[0]);
-
 void envVarManagerCb(const char *var, const char *val, void *userCtx)
 {
     // Cast the userCtx to the appropriate type.
@@ -20,24 +13,37 @@ void envVarManagerCb(const char *var, const char *val, void *userCtx)
     Serial.print((unsigned long)userCtx, HEX);
     Serial.println(".");
 
-    // Cache the values for each variable.
-    if (strcmp(var, "variable_a") == 0) {
-        strlcpy(cache->valueA, val, sizeof(cache->valueA));
-    }
-    else if (strcmp(var, "variable_b") == 0) {
-        strlcpy(cache->valueB, val, sizeof(cache->valueB));
-    }
-    else if (strcmp(var, "variable_c") == 0) {
-        strlcpy(cache->valueC, val, sizeof(cache->valueC));
-    }
 
-    Serial.println("Cached values:");
-    Serial.print("- variable_a has value ");
-    Serial.println(cache->valueA);
-    Serial.print("- variable_b has value ");
-    Serial.println(cache->valueB);
-    Serial.print("- variable_c has value ");
-    Serial.println(cache->valueC);
+    if (strcmp(var, "_sn") == 0) {
+        strlcpy(cache->serial_number, val, sizeof(cache->serial_number));
+    }
+    else if (strcmp(var, "string_a") == 0) {
+        strlcpy(cache->string_a, val, sizeof(cache->string_a));
+    }
+    else if (strcmp(var, "mode") == 0) {
+        cache->mode = atoi(val);
+    }
+    else if (strcmp(var, "set_point") == 0) {
+        cache->set_point = atof(val);
+    }
+    else if (strcmp(var, "comp_speed_max") == 0) {
+        cache->comp_speed_max = atof(val);
+    }
+    else if (strcmp(var, "comp_speed_min") == 0) {
+        cache->comp_speed_min = atof(val);
+    }
+    else if (strcmp(var, "fan_speed_max") == 0) {
+        cache->fan_speed_max = atof(val);
+    }
+    else if (strcmp(var, "fan_speed_min") == 0) {
+        cache->fan_speed_min = atof(val);
+    }
+    else if (strcmp(var, "pump_speed_max") == 0) {
+        cache->fan_speed_max = atof(val);
+    }
+    else if (strcmp(var, "pump_speed_min") == 0) {
+        cache->fan_speed_min = atof(val);
+    }
 }
 
 NotecardManager::NotecardManager(){
@@ -55,57 +61,155 @@ NotecardManager::NotecardManager(){
     Serial.println("Failed to set callback for NotecardEnvVarManager.");
     }
 
-
-    // envVarManager.setEnvVar("test", "test");
-    // envVarManager.getEnvVar("test");
 }
 
 
 
-void NotecardManager::hubSet(){
+void NotecardManager::init(const char *uid, const char *mode, int inbound, int outbound, bool sync){
+
     J *req = notecard.newRequest("hub.set");
     if (req) {
-        JAddStringToObject(req, "product", productUID);
-        JAddStringToObject(req, "mode", "continuous");
+        JAddStringToObject(req, "product", uid);
+        JAddStringToObject(req, "mode", mode);
+        JAddNumberToObject(req, "inbound", inbound);
+        JAddNumberToObject(req, "outbound", outbound);
         JAddBoolToObject(req, "sync", true);
+        JAddBoolToObject(req, "align", true); // Align periodic syncs to UTC intervals
+
         if (!notecard.sendRequest(req)) {
             notecard.logDebug("FATAL: Failed to configure Notecard!\n");
             Serial.println("FATAL: Failed to configure Notecard!");
             while(1);
         }
     }
+
+    req = notecard.newRequest("card.aux");
+    if (req) {
+        JAddStringToObject(req, "mode", "off");
+        if (!notecard.sendRequest(req)) {
+            notecard.logDebug("Warning, failed to set card.aux mode=off\n");
+        }
+    }
+
+    req = notecard.newRequest("card.dfu");
+    if (req) {
+        JAddStringToObject(req, "name", "esp32");
+        JAddBoolToObject(req, "on", true);
+        if (!notecard.sendRequest(req)) {
+            notecard.logDebug("Warning, failed to enable outboard DFU\n");
+        }
+    }
+
+    setDefaultEnvironment();
+    getEnvironment();
+
 }
 
 void NotecardManager::cardStatus(){
     char status[20];
-        if (J *req = notecard.newRequest("card.status")) {
-            J *rsp = notecard.requestAndResponse(req);
-            notecard.logDebug(JConvertToJSONString(rsp));
+    if (J *req = notecard.newRequest("card.status")) {
+        J *rsp = notecard.requestAndResponse(req);
+        // notecard.logDebug(JConvertToJSONString(rsp));
 
-            bool connected = JGetBool(rsp, "connected");
-            char *tempStatus = JGetString(rsp, "status");
-            strlcpy(status, tempStatus, sizeof(status));
-            int storage = JGetInt(rsp, "storage");
-            int time = JGetInt(rsp, "time");
-            bool cell = JGetBool(rsp, "cell");
+        connected = JGetBool(rsp, "connected");
+        char *tempStatus = JGetString(rsp, "status");
+        strlcpy(status, tempStatus, sizeof(status));
+        int storage = JGetInt(rsp, "storage");
+        int time = JGetInt(rsp, "time");
+        bool cell = JGetBool(rsp, "cell");
 
-            Serial.printf("status: %s\n", status);
+        notecard.deleteResponse(rsp);
+    }
+}
+void NotecardManager::cardWireless(){
+    char wireless[20];
+    if (J *req = notecard.newRequest("card.wireless")) {
+        J *rsp = notecard.requestAndResponse(req);
+        bars = JGetInt(rsp, "bars");
+        Serial.println(bars);
+    }
+}
 
-            notecard.deleteResponse(rsp);
-        }
+void NotecardManager::getEnvironment(){
+
+    // Check if any environment variables have been modified.
+    J *req = notecard.newRequest("env.modified");
+    JAddNumberToObject(req, "time", env_modified_time);
+    J *rsp = notecard.requestAndResponse(req);
+
+    if (notecard.responseError(rsp)){
+        //No modification
+        notecard.deleteResponse(rsp);
+    }
+
+    // Update the environment variable manager if there have been modifications.
+    else {
+        notecard.logDebug(JConvertToJSONString(rsp));
+        env_modified_time = JGetInt(rsp, "time");
+        Serial.printf("modified time: %d\n", env_modified_time);
+        notecard.deleteResponse(rsp);
+
+        notecard.logDebug("Fetching environment variables...\n");
+        if (NotecardEnvVarManager_fetch(envVarManager, NULL, NEVM_ENV_VAR_ALL)
+                != NEVM_SUCCESS) {
+                Serial.println("NotecardEnvVarManager_fetch failed.");
+            }
+    }   
+}   
+
+void NotecardManager::setDefaultEnvironment(){
+
+    char number_as_text[8];
+    EnvVarCache *cache = &envVarCache;
+
+    #define FLOAT_DECIMALS 3
+
+    J *req = NoteNewRequest("env.default");
+    JAddStringToObject(req, "name", "set_point");
+    JAddStringToObject(req, "text", dtostrf(cache->set_point, 0, FLOAT_DECIMALS, number_as_text));
+    notecard.sendRequest(req);
+
+    req = NoteNewRequest("env.default");
+    JAddStringToObject(req, "name", "mode");
+    JAddStringToObject(req, "text", dtostrf(cache->mode, 0, 0, number_as_text));
+    notecard.sendRequest(req);
+
+    req = NoteNewRequest("env.default");
+    JAddStringToObject(req, "name", "comp_speed_max");
+    JAddStringToObject(req, "text", dtostrf(cache->comp_speed_max, 0, FLOAT_DECIMALS, number_as_text));
+    notecard.sendRequest(req);
+
+    req = NoteNewRequest("env.default");
+    JAddStringToObject(req, "name", "comp_speed_min");
+    JAddStringToObject(req, "text", dtostrf(cache->comp_speed_min, 0, FLOAT_DECIMALS, number_as_text));
+    notecard.sendRequest(req);
+
+    req = NoteNewRequest("env.default");
+    JAddStringToObject(req, "name", "fan_speed_max");
+    JAddStringToObject(req, "text", dtostrf(cache->fan_speed_max, 0, FLOAT_DECIMALS, number_as_text));
+    notecard.sendRequest(req);
+
+    req = NoteNewRequest("env.default");
+    JAddStringToObject(req, "name", "fan_speed_min");
+    JAddStringToObject(req, "text", dtostrf(cache->fan_speed_min, 0, FLOAT_DECIMALS, number_as_text));
+    notecard.sendRequest(req);
+
+    req = NoteNewRequest("env.default");
+    JAddStringToObject(req, "name", "pump_speed_max");
+    JAddStringToObject(req, "text", dtostrf(cache->pump_speed_max, 0, FLOAT_DECIMALS, number_as_text));
+    notecard.sendRequest(req);
+
+    req = NoteNewRequest("env.default");
+    JAddStringToObject(req, "name", "pump_speed_min");
+    JAddStringToObject(req, "text", dtostrf(cache->pump_speed_min, 0, FLOAT_DECIMALS, number_as_text));
+    notecard.sendRequest(req);
 }
 
 
-void NotecardManager::service(int fetch_interval_ms){
-    currentMs = millis();
-    if (currentMs - lastFetchMs >= fetch_interval_ms) {
-        lastFetchMs = currentMs;
+void NotecardManager::service(){
+
+    getEnvironment();
+    cardStatus();
+    cardWireless();
         
-        notecard.logDebug("Fetch interval lapsed. Fetching environment "
-        "variables...\n");
-        if (NotecardEnvVarManager_fetch(envVarManager, envVars, numEnvVars)
-            != NEVM_SUCCESS) {
-            Serial.println("NotecardEnvVarManager_fetch failed.");
-        }
-        }
 }
