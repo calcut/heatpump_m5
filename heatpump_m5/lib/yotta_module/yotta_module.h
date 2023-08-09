@@ -6,6 +6,7 @@
 #include <Arduino.h>
 #include <ArduinoModbus.h>
 
+
 class YottaModule {
 
     private:
