@@ -157,6 +157,18 @@ void NotecardManager::getEnvironment(){
     }   
 }   
 
+void NotecardManager::getTime(){
+    if (J *req = notecard.newRequest("card.time")) {
+        J *rsp = notecard.requestAndResponse(req);
+        epoch_time = JGetInt(rsp, "time");
+        utc_offset_minutes = JGetInt(rsp, "minutes");
+        notecard.deleteResponse(rsp);
+    }
+    // convert epoch_time to date/time
+
+}
+
+
 void NotecardManager::setDefaultEnvironment(){
 
     char number_as_text[8];
@@ -210,6 +222,7 @@ void NotecardManager::service(){
 
     getEnvironment();
     cardStatus();
+    getTime();
     cardWireless();
         
 }

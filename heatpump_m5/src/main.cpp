@@ -6,6 +6,7 @@
 #include "ui_init.h"
 #include "notecard_manager.h"
 #include "yotta_module.h"
+#include "rtc_helpers.h"
 
 #define RX_PIN_RS485 13
 #define TX_PIN_RS485 14
@@ -40,8 +41,12 @@ StaticJsonDocument<200> vars;
 void setup() {
     M5.begin(true, true, true, true, kMBusModeOutput);  //Init M5Core2.
     // M5.begin(true, true, true, true, kMBusModeInput);  //Init M5Core2.
+
+
     Wire1.begin(21, 22, 400000);  //Init I2C_SYS
     Wire.begin(32, 33, 400000);  //Init I2C_EXT
+
+    setSystemTime(); //from RTC chip
 
     // pinMode(DE_PIN_RS485, OUTPUT);
     // digitalWrite(DE_PIN_RS485, HIGH);
@@ -61,11 +66,12 @@ void setup() {
     //   yottaModule.readTC_float(tc);
 
     //   // poll_interval = poll_interval +1000;
+
     // });
+
     app.onRepeat(1000, []() {
-        char time_str[10];
-        sprintf(time_str, "%d", millis());
-        lv_label_set_text(ui_Header_Time, time_str);
+       updateDateLabel();
+
     });
 
     app.onRepeat(NOTECARD_FETCH_INTERVAL_MS, []() {
@@ -74,6 +80,7 @@ void setup() {
         char bars_str[10];
         sprintf(bars_str, "bars: %d", notecardManager.bars);
         lv_label_set_text(ui_Header_Date, bars_str);
+        setRTC(notecardManager.epoch_time, notecardManager.utc_offset_minutes);
       }
       else{
         lv_label_set_text(ui_Header_Date,"Disconnected");

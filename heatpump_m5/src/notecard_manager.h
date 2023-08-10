@@ -40,9 +40,12 @@ class NotecardManager {
         void getEnvironment();
         void setDefaultEnvironment();
         void service();
+        void getTime();
         EnvVarCache envVarCache;
         bool connected;
         int bars;
+        int epoch_time = 0;
+        int utc_offset_minutes = 0;
 
 
 };
