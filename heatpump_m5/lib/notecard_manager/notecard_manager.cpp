@@ -157,6 +157,14 @@ void NotecardManager::getEnvironment(){
     }   
 }   
 
+void NotecardManager::setEnvironmentVariable(char *name, char * text){
+    J *req = notecard.newRequest("env.set");
+    JAddStringToObject(req, "name", name);
+    JAddStringToObject(req, "text", text);
+    notecard.sendRequest(req);
+}
+
+
 void NotecardManager::getTime(){
     if (J *req = notecard.newRequest("card.time")) {
         J *rsp = notecard.requestAndResponse(req);
@@ -164,8 +172,6 @@ void NotecardManager::getTime(){
         utc_offset_minutes = JGetInt(rsp, "minutes");
         notecard.deleteResponse(rsp);
     }
-    // convert epoch_time to date/time
-
 }
 
 

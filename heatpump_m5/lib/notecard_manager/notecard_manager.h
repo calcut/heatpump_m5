@@ -39,6 +39,7 @@ class NotecardManager {
         void cardWireless();
         void getEnvironment();
         void setDefaultEnvironment();
+        void setEnvironmentVariable(char *name, char * text);
         void service();
         void getTime();
         EnvVarCache envVarCache;
