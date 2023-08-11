@@ -52,6 +52,7 @@ void ui_event_Arc1( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t * target = lv_event_get_target(e);
 if ( event_code == LV_EVENT_VALUE_CHANGED) {
       _ui_arc_set_text_value( ui_Label_Celsius, target, "", "°");
+      update_setpoint( e );
 }
 }
 void ui_event_Fan_Speed_Control( lv_event_t * e) {
@@ -63,7 +64,7 @@ if ( event_code == LV_EVENT_VALUE_CHANGED) {
 void ui_event_Button1( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t * target = lv_event_get_target(e);
 if ( event_code == LV_EVENT_CLICKED) {
-      _ui_screen_change( &ui_Screen2, LV_SCR_LOAD_ANIM_OVER_LEFT, 300, 0, &ui_Screen2_screen_init);
+      _ui_screen_change( &ui_Screen2, LV_SCR_LOAD_ANIM_NONE, 150, 0, &ui_Screen2_screen_init);
 }
 }
 void ui_event_Button3( lv_event_t * e) {
@@ -81,7 +82,7 @@ if ( event_code == LV_EVENT_CLICKED) {
 void ui_event_Button2( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t * target = lv_event_get_target(e);
 if ( event_code == LV_EVENT_CLICKED) {
-      _ui_screen_change( &ui_Screen1, LV_SCR_LOAD_ANIM_OVER_RIGHT, 300, 0, &ui_Screen1_screen_init);
+      _ui_screen_change( &ui_Screen1, LV_SCR_LOAD_ANIM_NONE, 150, 0, &ui_Screen1_screen_init);
 }
 }
 
