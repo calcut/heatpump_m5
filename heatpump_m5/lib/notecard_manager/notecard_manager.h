@@ -1,6 +1,8 @@
 #ifndef NOTECARD_MANAGER_H
 #define NOTECARD_MANAGER_H
 
+#define DFU_ENABLE false
+
 #include <Arduino.h>
 #include <Notecard.h>
 #include "NotecardEnvVarManager.h"

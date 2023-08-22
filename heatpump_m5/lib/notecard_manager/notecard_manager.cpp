@@ -94,7 +94,7 @@ void NotecardManager::init(const char *uid, const char *mode, int inbound, int o
     req = notecard.newRequest("card.dfu");
     if (req) {
         JAddStringToObject(req, "name", "esp32");
-        JAddBoolToObject(req, "on", true);
+        JAddBoolToObject(req, "on", DFU_ENABLE);
         if (!notecard.sendRequest(req)) {
             notecard.logDebug("Warning, failed to enable outboard DFU\n");
         }
