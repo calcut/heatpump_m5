@@ -7,7 +7,7 @@
 #include "indev/keyboard.h"
 #include "sdl/sdl.h"
 
-#include "lvgl.h"
+#include "ui.h"
 
 
 #include <fcntl.h>
@@ -78,6 +78,8 @@ void hal_setup(void)
      * You have to call 'lv_tick_inc()' in periodically to inform LittelvGL about how much time were elapsed
      * Create an SDL thread to do this*/
     SDL_CreateThread(tick_thread, "tick", NULL);
+
+    ui_init();
 
 }
 
