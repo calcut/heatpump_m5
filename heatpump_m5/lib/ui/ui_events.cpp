@@ -4,26 +4,26 @@
 // Project name: Thermostat_M5
 
 #include "ui.h"
-#include <M5Core2.h>
+// #include <M5Core2.h>
 #include <lvgl.h>
 // #include "../notecard_manager/notecard_manager.h"
 
-extern NotecardManager notecardManager;
+// extern NotecardManager notecardManager;
 
 void fan_speed_value(lv_event_t * e)
 {
-	// Your code here
+	lv_obj_t * arc = lv_event_get_target(e);
 }
 
 void update_setpoint(lv_event_t * e)
 {
 	lv_obj_t * arc = lv_event_get_target(e);
 	float set_point = (float)lv_arc_get_value(arc);
-	Serial.printf("update_setpoint %d: \n\n\n", set_point);
+	// Serial.printf("update_setpoint %d: \n\n\n", set_point);
 
 	char number_as_text[8];
-	dtostrf(set_point, 0, 1, number_as_text);
-	notecardManager.setEnvironmentVariable("set_point", number_as_text);
+	// dtostrf(set_point, 0, 1, number_as_text);
+	// notecardManager.setEnvironmentVariable("set_point", number_as_text);
 
 
 }

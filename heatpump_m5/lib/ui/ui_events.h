@@ -10,7 +10,6 @@
 extern "C" {
 #endif
 
-void update_setpoint(lv_event_t * e);
 void fan_speed_value(lv_event_t * e);
 
 #ifdef __cplusplus
