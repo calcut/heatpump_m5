@@ -1,3 +1,6 @@
+
+#include "m5_core2_hal.h"
+
 #include <M5Core2.h>
 #include <lvgl.h>
 #include <ui.h>
@@ -69,23 +72,23 @@ void hal_setup() {
 
     // });
 
-    app.onRepeat(1000, []() {
-       updateDateLabel();
+    // app.onRepeat(1000, []() {
+    //    updateDateLabel();
 
-    });
+    // });
 
-    app.onRepeat(NOTECARD_FETCH_INTERVAL_MS, []() {
-      notecardManager.service();
-      if(notecardManager.connected){
-        char bars_str[10];
-        sprintf(bars_str, "bars: %d", notecardManager.bars);
-        lv_label_set_text(ui_Header_Date, bars_str);
-        setRTC(notecardManager.epoch_time, notecardManager.utc_offset_minutes);
-      }
-      else{
-        lv_label_set_text(ui_Header_Date,"Disconnected");
-      }
-    });
+    // app.onRepeat(NOTECARD_FETCH_INTERVAL_MS, []() {
+    //   notecardManager.service();
+    //   if(notecardManager.connected){
+    //     char bars_str[10];
+    //     sprintf(bars_str, "bars: %d", notecardManager.bars);
+    //     lv_label_set_text(ui_Header_Date, bars_str);
+    //     setRTC(notecardManager.epoch_time, notecardManager.utc_offset_minutes);
+    //   }
+    //   else{
+    //     lv_label_set_text(ui_Header_Date,"Disconnected");
+    //   }
+    // });
 
 
 }
