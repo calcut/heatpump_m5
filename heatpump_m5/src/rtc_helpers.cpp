@@ -20,8 +20,7 @@ void setSystemTime(){
 
     struct timeval tv;
     tv.tv_sec = mktime(&time_info);
-    Serial.printf("Setting time to %ld\n", tv.tv_sec);
-    Serial.printf("Setting time to %02d:%02d:%02d\n", TimeStruct.Hours, TimeStruct.Minutes, TimeStruct.Seconds);
+    Serial.printf("Setting sys time to %02d:%02d:%02d\n", TimeStruct.Hours, TimeStruct.Minutes, TimeStruct.Seconds);
     settimeofday(&tv, NULL);
 }
 
@@ -43,17 +42,23 @@ void setRTC(time_t epoch_time, int UTC_offset_minutes){
     DateStruct.Year = time_info->tm_year + 1900;
     M5.Rtc.SetDate(&DateStruct);
 
+    M5.Rtc.GetTime(&TimeStruct);
+    M5.Rtc.GetDate(&DateStruct);
+    Serial.printf("RTC time set to %02d:%02d\n", TimeStruct.Hours, TimeStruct.Minutes);
+
+    delay(1); //To allow the RTC chip to update, can see errors of ~+18 mins without this
+
     setSystemTime();
 }
 
 void updateDateLabel(){
     //Get Time from system, then update the label on the display
-    time_t now;
     struct tm *time_info;
+    struct timeval tv;
     char time_str[64];
 
-    time(&now);
-    time_info = localtime(&now);
+    gettimeofday(&tv, NULL);
+    time_info = localtime(&tv.tv_sec);
     strftime(time_str, sizeof(time_str), "%Y-%m-%d %X", time_info);
     lv_label_set_text(ui_Header_Time, time_str);
 }
