@@ -19,7 +19,7 @@ class YottaModule {
         void readTC_int_decimal(int32_t *tc);
         void setTypeTC();
         void getType();
-        void getModuleName();
+        void init();
 };
 
 #endif

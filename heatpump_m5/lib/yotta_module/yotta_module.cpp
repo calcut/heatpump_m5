@@ -2,7 +2,6 @@
 
 
 YottaModule::YottaModule(int slave_id) {
-    ModbusRTUClient.begin(9600, SERIAL_8N1);
     slave_id = slave_id;
     // ModbusRTUClient.master();
     // ModbusRTUClient.slave(slave_id);
@@ -86,8 +85,10 @@ void YottaModule::getType(){
     }
 }
 
-void YottaModule::getModuleName(){
+void YottaModule::init(){
     // Read the module name
+    ModbusRTUClient.begin(9600, SERIAL_8N1);
+
     Serial.println("Reading module name");
 
     if (ModbusRTUClient.requestFrom(slave_id, HOLDING_REGISTERS,

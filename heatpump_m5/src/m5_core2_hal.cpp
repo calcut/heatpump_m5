@@ -19,8 +19,8 @@ RS485Class RS485(Serial2, RX_PIN_RS485, TX_PIN_RS485, DE_PIN_RS485, -1);
 
 
 void hal_setup() {
-    M5.begin(true, true, true, true, kMBusModeOutput);  //Init M5Core2.
-    // M5.begin(true, true, true, true, kMBusModeInput);  //Init M5Core2.
+    // M5.begin(true, true, true, true, kMBusModeOutput);  //Init M5Core2.
+    M5.begin(true, true, true, true, kMBusModeInput);  //Init M5Core2.
 
 
     Wire1.begin(21, 22, 400000);  //Init I2C_SYS

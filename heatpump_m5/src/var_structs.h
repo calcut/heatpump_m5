@@ -6,7 +6,7 @@ typedef struct {
 } db_variables_t;
 
 typedef struct{
-  float tc1;
+  float tc[8];
   float compressor_speed;
   float fan_speed;
 } qo_variables_t;

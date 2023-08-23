@@ -30,8 +30,6 @@ YottaModule yottaModule(YOTTA_MODULE_ID);
 uint32_t currentMs = millis();
 uint32_t poll_interval = YOTTA_POLL_INTERVAL_MS;
 
-// float_t tc[8];
-// StaticJsonDocument<200> vars;
 db_variables_t db_vars;
 qo_variables_t qo_vars;
 env_variables_t env_vars;
@@ -40,48 +38,37 @@ env_variables_t env_vars;
 void setup() {
   hal_setup();
 
-
-    notecardManager.init(NC_UID, NC_MODE, NC_INBOUND, NC_OUTBOUND, NC_SYNC);
-    yottaModule.getModuleName();
-
-    // Serial.println( "Setup done" );
-
-    // app.onRepeat(poll_interval, []() {
-    //   yottaModule.readTC_float(tc);
-
-    //   // poll_interval = poll_interval +1000;
-
-    // });
+  notecardManager.init(NC_UID, NC_MODE, NC_INBOUND, NC_OUTBOUND, NC_SYNC);
+  yottaModule.init();
 
 
+  app.onRepeat(poll_interval, []() {
+    yottaModule.readTC_float(qo_vars.tc);
 
+  });
 
-    // app.onRepeat(1000, []() {
-    //    updateDateLabel();
+  app.onRepeat(1000, []() {
+      updateDateLabel();
+  });
 
-    // });
-
-    app.onRepeat(NOTECARD_FETCH_INTERVAL_MS, []() {
-      notecardManager.service();
-      if(notecardManager.connected){
-        char bars_str[10];
-        sprintf(bars_str, "bars: %d", notecardManager.bars);
-        lv_label_set_text(ui_Header_Date, bars_str);
-        setRTC(notecardManager.epoch_time, notecardManager.utc_offset_minutes);
-      }
-      else{
-        lv_label_set_text(ui_Header_Date,"Disconnected");
-      }
-    });
-
+  app.onRepeat(NOTECARD_FETCH_INTERVAL_MS, []() {
+    notecardManager.service();
+    if(notecardManager.connected){
+      char bars_str[10];
+      sprintf(bars_str, "bars: %d", notecardManager.bars);
+      lv_label_set_text(ui_Header_Date, bars_str);
+      setRTC(notecardManager.epoch_time, notecardManager.utc_offset_minutes);
+    }
+    else{
+      lv_label_set_text(ui_Header_Date,"Disconnected");
+    }
+  });
+  Serial.println( "Setup done" );
 
 }
 
 void loop(){ 
   hal_loop();
-
-    // M5.update();  //Read the press state of the key. A, B, C
-    // lv_task_handler();
-    app.tick();
+  app.tick();
 
 }
