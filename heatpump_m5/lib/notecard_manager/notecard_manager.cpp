@@ -105,11 +105,39 @@ void NotecardManager::init(const char *uid, const char *mode, int inbound, int o
 
 }
 
+void NotecardManager::hubGet(){
+    if (J *req = notecard.newRequest("hub.get")) {
+        J *rsp = notecard.requestAndResponse(req);
+        char *tempDevice = JGetString(rsp, "device");
+        strlcpy(deviceUID, tempDevice, sizeof(deviceUID));
+        char *tempSN = JGetString(rsp, "sn");
+        strlcpy(sn, tempSN, sizeof(sn));
+        notecard.deleteResponse(rsp);
+    }
+}
+
+void NotecardManager::hubStatus(){
+    if (J *req = notecard.newRequest("hub.status")) {
+        J *rsp = notecard.requestAndResponse(req);
+
+        char *tempStatus = JGetString(rsp, "status");
+        strlcpy(hub_status, tempStatus, sizeof(hub_status));
+        notecard.deleteResponse(rsp);
+    }
+}
+void NotecardManager::hubSyncStatus(){
+    if (J *req = notecard.newRequest("hub.sync.status")) {
+        J *rsp = notecard.requestAndResponse(req);
+        char *tempStatus = JGetString(rsp, "status");
+        strlcpy(hub_sync_status, tempStatus, sizeof(hub_sync_status));
+        notecard.deleteResponse(rsp);
+    }
+}
+
 void NotecardManager::cardStatus(){
     char status[20];
     if (J *req = notecard.newRequest("card.status")) {
         J *rsp = notecard.requestAndResponse(req);
-        // notecard.logDebug(JConvertToJSONString(rsp));
 
         connected = JGetBool(rsp, "connected");
         char *tempStatus = JGetString(rsp, "status");
@@ -117,16 +145,19 @@ void NotecardManager::cardStatus(){
         int storage = JGetInt(rsp, "storage");
         int time = JGetInt(rsp, "time");
         bool cell = JGetBool(rsp, "cell");
-
         notecard.deleteResponse(rsp);
     }
 }
 void NotecardManager::cardWireless(){
-    char wireless[20];
     if (J *req = notecard.newRequest("card.wireless")) {
         J *rsp = notecard.requestAndResponse(req);
-        bars = JGetInt(rsp, "bars");
-        Serial.println(bars);
+        J *net = JGetObject(rsp, "net");
+        bars = JGetInt(net, "bars");
+        rssi = JGetInt(net, "rssi");
+        char *tempRat = JGetString(net, "rat");
+        char *tempBand = JGetString(net, "band");
+        strlcpy(rat, tempRat, sizeof(rat));
+        strlcpy(band, tempBand, sizeof(band));
     }
 }
 
@@ -221,14 +252,4 @@ void NotecardManager::setDefaultEnvironment(){
     JAddStringToObject(req, "name", "pump_speed_min");
     JAddStringToObject(req, "text", dtostrf(cache->pump_speed_min, 0, FLOAT_DECIMALS, number_as_text));
     notecard.sendRequest(req);
-}
-
-
-void NotecardManager::service(){
-
-    getEnvironment();
-    cardStatus();
-    getTime();
-    cardWireless();
-        
 }

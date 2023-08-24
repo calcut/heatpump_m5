@@ -1,14 +1,17 @@
 
 
 typedef struct {
-  float setpoint;
-  int mode;
+  float setpoint = 20.0;
+  int mode = 1;
+  int poll_interval_ms = 2000;
+  int nc_service_interval_s = 10;
 } db_variables_t;
 
 typedef struct{
-  float tc[8];
-  float compressor_speed;
-  float fan_speed;
+  float tc[8] = {0,0,0,0,0,0,0,0};
+  time_t last_poll_time = 0;
+  float compressor_speed = 50.0;
+  float fan_speed = 50.0;
 } qo_variables_t;
 
 // A struct to cache the values of environment variables.

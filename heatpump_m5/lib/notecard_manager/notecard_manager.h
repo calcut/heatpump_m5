@@ -37,16 +37,25 @@ class NotecardManager {
     public:
         NotecardManager();
         void init(const char *uid, const char *mode, int inbound, int outbound, bool sync);
+        void hubGet();
+        void hubStatus();
+        void hubSyncStatus();
         void cardStatus();
         void cardWireless();
         void getEnvironment();
         void setDefaultEnvironment();
         void setEnvironmentVariable(char *name, char * text);
-        void service();
         void getTime();
         EnvVarCache envVarCache;
         bool connected;
         int bars;
+        int rssi;
+        char rat[8];
+        char deviceUID[20];
+        char sn[20];
+        char band[8];
+        char hub_status[40];
+        char hub_sync_status[40];
         int epoch_time = 0;
         int utc_offset_minutes = 0;
 

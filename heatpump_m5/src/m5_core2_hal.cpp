@@ -43,7 +43,11 @@ void hal_setup() {
 
 void hal_loop(){ 
 
-    M5.update();  //Read the press state of the key. A, B, C
-    lv_task_handler();
+    // M5.update();  //Read the press state of the key. A, B, C
+    // lv_task_handler();
+    // lv_timer_handler();
+    // lv_task_handler();
+
+
 
 }

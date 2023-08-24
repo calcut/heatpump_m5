@@ -100,4 +100,7 @@ void YottaModule::init(){
         }
         Serial.println();
     }
+
+    setTypeTC();
+    getType();
 }
