@@ -60,5 +60,6 @@ void updateDateLabel(){
     gettimeofday(&tv, NULL);
     time_info = localtime(&tv.tv_sec);
     strftime(time_str, sizeof(time_str), "%Y-%m-%d %X", time_info);
-    lv_label_set_text(ui_Header_Time, time_str);
+    lv_label_set_text(ui_Header_Time1, time_str);
+    lv_label_set_text(ui_Header_Time3, time_str);
 }

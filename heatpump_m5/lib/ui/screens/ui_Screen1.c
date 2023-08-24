@@ -31,13 +31,13 @@ lv_label_set_text(ui_Header_Date,"Set Points");
 lv_obj_set_style_text_color(ui_Header_Date, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Header_Date, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_Header_Time = lv_label_create(ui_Header);
-lv_obj_set_width( ui_Header_Time, LV_SIZE_CONTENT);  /// 1
-lv_obj_set_height( ui_Header_Time, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_align( ui_Header_Time, LV_ALIGN_RIGHT_MID );
-lv_label_set_text(ui_Header_Time,"--:--:--");
-lv_obj_set_style_text_color(ui_Header_Time, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_text_opa(ui_Header_Time, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_Header_Time1 = lv_label_create(ui_Header);
+lv_obj_set_width( ui_Header_Time1, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Header_Time1, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_align( ui_Header_Time1, LV_ALIGN_RIGHT_MID );
+lv_label_set_text(ui_Header_Time1,"--:--:--");
+lv_obj_set_style_text_color(ui_Header_Time1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_text_opa(ui_Header_Time1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_Arc_Group = lv_obj_create(ui_Screen1);
 lv_obj_set_width( ui_Arc_Group, 292);
