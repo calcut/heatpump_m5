@@ -53,9 +53,9 @@ class NotecardManager {
         char rat[8];
         char deviceUID[20];
         char sn[20];
-        char band[8];
-        char hub_status[40];
-        char hub_sync_status[40];
+        char band[20];
+        char hub_status[64];
+        char hub_sync_status[64];
         int epoch_time = 0;
         int utc_offset_minutes = 0;
 

@@ -11,6 +11,6 @@ void setSystemTime();
 void setRTC(time_t epoch_time, int UTC_offset_minutes);
 
 //Get Time from system, then update the label on the display
-void updateDateLabel();
+void updateDateTimeLabels();
 
 #endif

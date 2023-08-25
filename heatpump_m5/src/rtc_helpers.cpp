@@ -51,7 +51,7 @@ void setRTC(time_t epoch_time, int UTC_offset_minutes){
     setSystemTime();
 }
 
-void updateDateLabel(){
+void updateDateTimeLabels(){
     //Get Time from system, then update the label on the display
     struct tm *time_info;
     struct timeval tv;
@@ -59,7 +59,15 @@ void updateDateLabel(){
 
     gettimeofday(&tv, NULL);
     time_info = localtime(&tv.tv_sec);
-    strftime(time_str, sizeof(time_str), "%Y-%m-%d %X", time_info);
+
+    // to show only the time
+    strftime(time_str, sizeof(time_str), "%X", time_info);
     lv_label_set_text(ui_Header_Time1, time_str);
+    lv_label_set_text(ui_Header_Time2, time_str);
     lv_label_set_text(ui_Header_Time3, time_str);
+
+    // to show the full date and time
+    // strftime(time_str, sizeof(time_str), "%Y-%m-%d %X", time_info);
+    // lv_label_set_text(ui_Header_Time1, time_str);
+    // lv_label_set_text(ui_Header_Time3, time_str);
 }

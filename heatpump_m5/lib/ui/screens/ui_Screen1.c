@@ -13,25 +13,25 @@ lv_obj_set_style_bg_color(ui_Screen1, lv_color_hex(0x464B55), LV_PART_MAIN | LV_
 lv_obj_set_style_bg_opa(ui_Screen1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_grad_color(ui_Screen1, lv_color_hex(0x2D323C), LV_PART_MAIN | LV_STATE_DEFAULT );
 
-ui_Header = lv_obj_create(ui_Screen1);
-lv_obj_set_height( ui_Header, 25);
-lv_obj_set_width( ui_Header, lv_pct(100));
-lv_obj_set_align( ui_Header, LV_ALIGN_TOP_MID );
-lv_obj_clear_flag( ui_Header, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-lv_obj_set_style_radius(ui_Header, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_bg_color(ui_Header, lv_color_hex(0x14191E), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_bg_opa(ui_Header, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_border_width(ui_Header, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_Header1 = lv_obj_create(ui_Screen1);
+lv_obj_set_height( ui_Header1, 25);
+lv_obj_set_width( ui_Header1, lv_pct(100));
+lv_obj_set_align( ui_Header1, LV_ALIGN_TOP_MID );
+lv_obj_clear_flag( ui_Header1, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_obj_set_style_radius(ui_Header1, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_color(ui_Header1, lv_color_hex(0x14191E), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_Header1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_border_width(ui_Header1, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_Header_Date = lv_label_create(ui_Header);
-lv_obj_set_width( ui_Header_Date, LV_SIZE_CONTENT);  /// 1
-lv_obj_set_height( ui_Header_Date, LV_SIZE_CONTENT);   /// 1
-lv_obj_set_align( ui_Header_Date, LV_ALIGN_LEFT_MID );
-lv_label_set_text(ui_Header_Date,"Set Points");
-lv_obj_set_style_text_color(ui_Header_Date, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
-lv_obj_set_style_text_opa(ui_Header_Date, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_Header_Title1 = lv_label_create(ui_Header1);
+lv_obj_set_width( ui_Header_Title1, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Header_Title1, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_align( ui_Header_Title1, LV_ALIGN_LEFT_MID );
+lv_label_set_text(ui_Header_Title1,"Set Points");
+lv_obj_set_style_text_color(ui_Header_Title1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_text_opa(ui_Header_Title1, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_Header_Time1 = lv_label_create(ui_Header);
+ui_Header_Time1 = lv_label_create(ui_Header1);
 lv_obj_set_width( ui_Header_Time1, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Header_Time1, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_align( ui_Header_Time1, LV_ALIGN_RIGHT_MID );

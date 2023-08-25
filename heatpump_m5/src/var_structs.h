@@ -4,7 +4,8 @@ typedef struct {
   float setpoint = 20.0;
   int mode = 1;
   int poll_interval_ms = 2000;
-  int nc_service_interval_s = 10;
+  int nc_time_sync_interval_s = 10;
+  int nc_info_interval_s = 5;
 } db_variables_t;
 
 typedef struct{

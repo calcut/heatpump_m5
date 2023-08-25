@@ -11,8 +11,8 @@
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
 lv_obj_t *ui_Screen1;
-lv_obj_t *ui_Header;
-lv_obj_t *ui_Header_Date;
+lv_obj_t *ui_Header1;
+lv_obj_t *ui_Header_Title1;
 lv_obj_t *ui_Header_Time1;
 lv_obj_t *ui_Arc_Group;
 lv_obj_t *ui_Label2;
@@ -38,7 +38,41 @@ void ui_event_Button2b( lv_event_t * e);
 lv_obj_t *ui_Button2b;
 void ui_event_Button2c( lv_event_t * e);
 lv_obj_t *ui_Button2c;
-lv_obj_t *ui_Image1;
+lv_obj_t *ui_Header2;
+lv_obj_t *ui_Header_Time2;
+lv_obj_t *ui_Header_Title2;
+lv_obj_t *ui_Panel2_sensor1;
+lv_obj_t *ui_Bar2_value1;
+lv_obj_t *ui_Label2_value1;
+lv_obj_t *ui_Label2_name1;
+lv_obj_t *ui_Panel2_sensor2;
+lv_obj_t *ui_Bar2_value2;
+lv_obj_t *ui_Label2_value2;
+lv_obj_t *ui_Label2_name2;
+lv_obj_t *ui_Panel2_sensor3;
+lv_obj_t *ui_Bar2_value3;
+lv_obj_t *ui_Label2_value3;
+lv_obj_t *ui_Label2_name3;
+lv_obj_t *ui_Panel2_sensor4;
+lv_obj_t *ui_Bar2_value4;
+lv_obj_t *ui_Label2_value4;
+lv_obj_t *ui_Label2_name4;
+lv_obj_t *ui_Panel2_sensor5;
+lv_obj_t *ui_Bar2_value5;
+lv_obj_t *ui_Label2_value5;
+lv_obj_t *ui_Label2_name5;
+lv_obj_t *ui_Panel2_sensor6;
+lv_obj_t *ui_Bar2_value6;
+lv_obj_t *ui_Label2_value6;
+lv_obj_t *ui_Label2_name6;
+lv_obj_t *ui_Panel2_sensor7;
+lv_obj_t *ui_Bar2_value7;
+lv_obj_t *ui_Label2_value7;
+lv_obj_t *ui_Label2_name7;
+lv_obj_t *ui_Panel2_sensor8;
+lv_obj_t *ui_Bar2_value8;
+lv_obj_t *ui_Label2_value8;
+lv_obj_t *ui_Label2_name8;
 
 // SCREEN: ui_Screen3
 void ui_Screen3_screen_init(void);
@@ -50,22 +84,24 @@ lv_obj_t *ui_Button3b;
 void ui_event_Button3c( lv_event_t * e);
 lv_obj_t *ui_Button3c;
 lv_obj_t *ui_Bar1;
-lv_obj_t *ui_Header1;
-lv_obj_t *ui_Header_Title;
+lv_obj_t *ui_Header3;
+lv_obj_t *ui_Header_Title3;
 lv_obj_t *ui_Header_Time3;
 lv_obj_t *ui_Bar2;
 lv_obj_t *ui_Bar3;
 lv_obj_t *ui_Bar4;
 lv_obj_t *ui_LabelRSSI;
+lv_obj_t *ui_LabelConnected;
 lv_obj_t *ui_LabelBand;
 lv_obj_t *ui_LabelRat;
-lv_obj_t *ui_LabelConnected;
 lv_obj_t *ui_LabelSerial;
 lv_obj_t *ui_LabelSyncStatus;
 lv_obj_t *ui_LabelDevice;
 lv_obj_t *ui_LabelHubStatus;
-lv_obj_t *ui_TextAreaSyncStatus;
 lv_obj_t *ui_TextAreaHubStatus;
+lv_obj_t *ui_TextAreaSyncStatus;
+lv_obj_t *ui_Button3_Refresh;
+lv_obj_t *ui_Label3_Refresh;
 lv_obj_t *ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
@@ -112,7 +148,7 @@ if ( event_code == LV_EVENT_CLICKED) {
 void ui_event_Button2a( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);lv_obj_t * target = lv_event_get_target(e);
 if ( event_code == LV_EVENT_CLICKED) {
-      _ui_screen_change( &ui_Screen1, LV_SCR_LOAD_ANIM_FADE_ON, 150, 0, &ui_Screen1_screen_init);
+      _ui_screen_change( &ui_Screen3, LV_SCR_LOAD_ANIM_FADE_ON, 150, 0, &ui_Screen3_screen_init);
 }
 }
 void ui_event_Button2b( lv_event_t * e) {
