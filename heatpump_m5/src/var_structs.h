@@ -2,7 +2,7 @@
 #define VAR_STRUCTS_H
 
 typedef struct {
-  float setpoint = 20.0;
+  float setpoint = 25.0;
   int mode = 1;
   int poll_interval_ms = 2000;
   int nc_time_sync_interval_s = 10;
@@ -19,9 +19,9 @@ typedef struct{
 // A struct to cache the values of environment variables.
 typedef struct {
     char serial_number[32];
-    float kp = 100.0;
-    float ki = 100.0;
-    float kd = 100.0;
+    float kp = 20.0;
+    float ki = 0;
+    float kd = 0;
     float comp_speed_max = 100.0;
     float comp_speed_min = 0.0;
     float fan_speed_max = 100.0;
