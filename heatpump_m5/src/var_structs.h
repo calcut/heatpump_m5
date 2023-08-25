@@ -1,4 +1,5 @@
-
+#ifndef VAR_STRUCTS_H
+#define VAR_STRUCTS_H
 
 typedef struct {
   float setpoint = 20.0;
@@ -28,3 +29,5 @@ typedef struct {
     float pump_speed_max = 100.0;
     float pump_speed_min = 0.0;
 } env_variables_t;
+
+#endif
