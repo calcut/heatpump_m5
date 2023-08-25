@@ -72,14 +72,14 @@
 #else
 
 /*Size of the memory available for `lv_mem_alloc()` in bytes (>= 2kB)*/
-#define LV_MEM_SIZE (48U * 1024U)          /*[bytes]*/
+#define LV_MEM_SIZE (128U * 1024U)          /*[bytes]*/
 
 /*Set an address for the memory pool instead of allocating it as a normal array. Can be in external SRAM too.*/
 #define LV_MEM_ADR 0     /*0: unused*/
 /*Instead of an address give a memory allocator that will be called to get a memory pool for LVGL. E.g. my_malloc*/
 #if LV_MEM_ADR == 0
-    #undef LV_MEM_POOL_INCLUDE
-    #undef LV_MEM_POOL_ALLOC
+    #define LV_MEM_POOL_INCLUDE <esp32-hal-psram.h> //the header file declaring ps_malloc
+    #define LV_MEM_POOL_ALLOC ps_malloc //use PS RAM instead of DRAM
 #endif
 
 /*Number of the intermediate memory buffer used during rendering and other internal processing mechanisms.
@@ -240,7 +240,7 @@
  *-----------*/
 
 /*Enable the log module*/
-#define LV_USE_LOG 0
+#define LV_USE_LOG 1
 #if LV_USE_LOG
 
     /*How important log should be added:
