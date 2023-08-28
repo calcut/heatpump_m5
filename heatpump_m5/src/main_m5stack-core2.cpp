@@ -30,7 +30,7 @@ db_variables_t db_vars;
 qo_variables_t qo_vars;
 env_variables_t env_vars;
 
-QuickPID myPID(
+QuickPID compressorPID(
     &qo_vars.tc[0],             //Input
     &qo_vars.compressor_speed,  //Output
     &db_vars.setpoint          //Setpoint
@@ -66,10 +66,11 @@ void setup() {
     static uint32_t user_data = 10;
     lv_timer_t * timer_1s = lv_timer_create(lv_timer_1s, 1000, &user_data);
 
-    myPID.SetTunings(env_vars.kp, env_vars.ki, env_vars.kd);
-    myPID.SetMode(1); //Automatic mode
-    myPID.SetSampleTimeUs(100000); // 1 second
-    myPID.SetOutputLimits(env_vars.comp_speed_min, env_vars.comp_speed_max);
+    compressorPID.SetTunings(env_vars.kp, env_vars.ki, env_vars.kd);
+    compressorPID.SetMode(1); //Automatic mode
+    compressorPID.SetSampleTimeUs(100000); // 1 second
+    compressorPID.SetOutputLimits(env_vars.comp_speed_min, env_vars.comp_speed_max);
+    compressorPID.Reset(); //Sometimes outputSum is not initialised to zero otherwise
 
     Serial.println( "Setup done" );
 
@@ -80,7 +81,7 @@ void loop(){
     lv_timer_handler();
     
     poll();
-    myPID.Compute();
+    compressorPID.Compute();
     // sprintf(buffer, "%f", qo_vars.compressor_speed);
     // lv_label_set_text(ui_Label2_value8, buffer);
     // lv_label_set_text(ui_Label2_name8, "Compressor Speed");
@@ -88,6 +89,9 @@ void loop(){
 
     if (lv_scr_act() == ui_Screen3){
         display_notecard_info();
+    }
+    if (lv_scr_act() == ui_Screen4){
+        display_pid_info();
     }
     // hal_loop();
     // M5.update();  //Read the press state of the key. A, B, C

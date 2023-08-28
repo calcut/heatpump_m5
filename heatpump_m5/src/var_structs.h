@@ -7,6 +7,7 @@ typedef struct {
   int poll_interval_ms = 2000;
   int nc_time_sync_interval_s = 10;
   int nc_info_interval_s = 5;
+  int pid_info_interval_s = 2;
 } db_variables_t;
 
 typedef struct{
@@ -20,8 +21,8 @@ typedef struct{
 typedef struct {
     char serial_number[32];
     float kp = 20.0;
-    float ki = 0;
-    float kd = 0;
+    float ki = 1.0;
+    float kd = 0.0;
     float comp_speed_max = 100.0;
     float comp_speed_min = 0.0;
     float fan_speed_max = 100.0;

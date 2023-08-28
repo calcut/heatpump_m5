@@ -333,7 +333,6 @@ lv_obj_set_y( ui_Label2_name8, -10 );
 lv_label_set_text(ui_Label2_name8,"Compressor Out");
 
 lv_obj_add_event_cb(ui_Button2a, ui_event_Button2a, LV_EVENT_ALL, NULL);
-lv_obj_add_event_cb(ui_Button2b, ui_event_Button2b, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_Button2c, ui_event_Button2c, LV_EVENT_ALL, NULL);
 
 }

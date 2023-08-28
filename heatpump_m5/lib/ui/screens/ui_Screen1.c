@@ -179,7 +179,6 @@ lv_obj_clear_flag( ui_Button1c, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 lv_obj_add_event_cb(ui_Arc1, ui_event_Arc1, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_Fan_Speed_Control, ui_event_Fan_Speed_Control, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_Button1a, ui_event_Button1a, LV_EVENT_ALL, NULL);
-lv_obj_add_event_cb(ui_Button1b, ui_event_Button1b, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_Button1c, ui_event_Button1c, LV_EVENT_ALL, NULL);
 
 }

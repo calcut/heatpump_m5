@@ -1,7 +1,51 @@
 #include <gui_helpers.h>
 
 int timer_nc_info = 0;
+int timer_pid_info = 0;
 char text_buffer[64];
+
+void display_pid_info(){
+    if (millis() - timer_pid_info > db_vars.pid_info_interval_s * 1000) {
+        timer_pid_info = millis();
+
+        Serial.printf("PID info poll\n");
+
+        sprintf(text_buffer, "%.3g", compressorPID.GetKp());
+        lv_label_set_text(ui_Label4_Kp_val, text_buffer);
+
+        sprintf(text_buffer, "%.3g", compressorPID.GetKi());
+        lv_label_set_text(ui_Label4_Ki_val, text_buffer);
+
+        sprintf(text_buffer, "%.3g", compressorPID.GetKd());
+        lv_label_set_text(ui_Label4_Kd_val, text_buffer);
+
+        sprintf(text_buffer, "%.3g", compressorPID.GetPterm());
+        lv_label_set_text(ui_Label4_Pterm_val, text_buffer);
+
+        //This is just the most recent term, not the integrated history
+        // sprintf(text_buffer, "%.3g", compressorPID.GetIterm()); 
+
+        sprintf(text_buffer, "%.3g", compressorPID.GetOutputSum()); //include history
+        lv_label_set_text(ui_Label4_Iterm_val, text_buffer);
+
+        sprintf(text_buffer, "%.3g", compressorPID.GetDterm());
+        lv_label_set_text(ui_Label4_Dterm_val, text_buffer);
+
+        sprintf(text_buffer, "%.3g", qo_vars.compressor_speed);
+        lv_label_set_text(ui_Label4_Output_val, text_buffer);
+
+        sprintf(text_buffer, "%.3g", db_vars.setpoint);
+        lv_label_set_text(ui_Label4_Setpoint_val, text_buffer);
+
+        sprintf(text_buffer, "%.3g", qo_vars.tc[0]);
+        lv_label_set_text(ui_Label4_Input_val, text_buffer);
+
+        sprintf(text_buffer, "%.3g", db_vars.setpoint - qo_vars.tc[0]);
+        lv_label_set_text(ui_Label4_Error_val, text_buffer);
+
+    }
+}
+
 
 void display_notecard_info(){
     if (millis() - timer_nc_info > db_vars.nc_info_interval_s * 1000) {

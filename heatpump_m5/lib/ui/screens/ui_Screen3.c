@@ -182,7 +182,6 @@ lv_obj_set_align( ui_Label3_Refresh, LV_ALIGN_CENTER );
 lv_label_set_text(ui_Label3_Refresh,"Refresh");
 
 lv_obj_add_event_cb(ui_Button3a, ui_event_Button3a, LV_EVENT_ALL, NULL);
-lv_obj_add_event_cb(ui_Button3b, ui_event_Button3b, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_Button3c, ui_event_Button3c, LV_EVENT_ALL, NULL);
 
 }
