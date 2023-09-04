@@ -44,7 +44,7 @@ int timer_nc_service = 0;
 
 char buffer[64];
 
-void poll(void);
+void poll(void * pvParameters);
 void notecard_time_sync(void);
 
 void setup() {
@@ -59,6 +59,14 @@ void setup() {
     compressorPID.SetOutputLimits(env_vars.comp_speed_min, env_vars.comp_speed_max);
     compressorPID.Reset(); //Sometimes outputSum is not initialised to zero otherwise
 
+    xTaskCreate(
+        poll, // task function
+        "Poll Yotta Module", // task name
+        2048, // stack size in bytes
+        NULL, // pointer to parameters
+        1, // priority
+        NULL); // out pointer to task handle
+
     Serial.println( "Setup done" );
 
 }
@@ -67,7 +75,6 @@ void loop(){
 
     lv_timer_handler();
     
-    poll();
     compressorPID.Compute();
     notecard_time_sync();
 
@@ -107,18 +114,19 @@ void notecard_time_sync(){
 
 
 
-void poll(){
-  if (millis() - timer_poll > db_vars.poll_interval_ms) {
-    timer_poll = millis();
+void poll(void * pvParameters){
+    (void)pvParameters;
+    while(1){
+        Serial.printf("Polling at %d ms\n", db_vars.poll_interval_ms);
+        yottaModule.readTC_float(qo_vars.tc);
+        lv_timer_handler();
 
-    Serial.printf("Polling at %d ms\n", db_vars.poll_interval_ms);
-    yottaModule.readTC_float(qo_vars.tc);
-    lv_timer_handler();
-
-    time_t now;
-    time(&now);
-    qo_vars.last_poll_time = now;
-    display_sensor_info();
-  }
+        time_t now;
+        time(&now);
+        qo_vars.last_poll_time = now;
+        display_sensor_info();
+        vTaskDelay(db_vars.poll_interval_ms / portTICK_PERIOD_MS);
+    }
+    
 }
 
