@@ -4,6 +4,14 @@ int timer_nc_info = 0;
 int timer_pid_info = 0;
 char text_buffer[64];
 
+// For Date/Time counter in UI
+lv_timer_t * timer_1s = lv_timer_create(lv_timer_1s, 1000, NULL);
+
+void lv_timer_1s(lv_timer_t * timer)
+{
+    display_date_time_labels();
+}
+
 void display_pid_info(){
     if (millis() - timer_pid_info > db_vars.pid_info_interval_s * 1000) {
         timer_pid_info = millis();

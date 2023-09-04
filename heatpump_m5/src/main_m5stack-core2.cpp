@@ -21,6 +21,9 @@
 #define NC_OUTBOUND 1
 #define NC_UID "dwt.ac.uk.heatpump"
 
+#define FLOAT_DECIMALS 1
+
+
 NotecardManager notecardManager;
 YottaModule yottaModule(YOTTA_MODULE_ID);
 
@@ -36,35 +39,19 @@ QuickPID compressorPID(
     &db_vars.setpoint          //Setpoint
 );   
 
-double blank;
 int timer_poll = 0;
 int timer_nc_service = 0;
 
 char buffer[64];
-#define FLOAT_DECIMALS 1
 
 void poll(void);
 void notecard_time_sync(void);
-void IRAM_ATTR Timer0_ISR(void);
-
-hw_timer_t *Timer0_Cfg = NULL;
-void lv_timer_1s(lv_timer_t * timer);
-
-
 
 void setup() {
     hal_setup();
 
     notecardManager.init(NC_UID, NC_MODE, NC_INBOUND, NC_OUTBOUND, NC_SYNC);
     yottaModule.init();
-
-    Timer0_Cfg = timerBegin(0, 80, true);
-    timerAttachInterrupt(Timer0_Cfg, &Timer0_ISR, true);
-    timerAlarmWrite(Timer0_Cfg, 10000, true);
-    timerAlarmEnable(Timer0_Cfg);
-
-    static uint32_t user_data = 10;
-    lv_timer_t * timer_1s = lv_timer_create(lv_timer_1s, 1000, &user_data);
 
     compressorPID.SetTunings(env_vars.kp, env_vars.ki, env_vars.kd);
     compressorPID.SetMode(1); //Automatic mode
@@ -82,9 +69,6 @@ void loop(){
     
     poll();
     compressorPID.Compute();
-    // sprintf(buffer, "%f", qo_vars.compressor_speed);
-    // lv_label_set_text(ui_Label2_value8, buffer);
-    // lv_label_set_text(ui_Label2_name8, "Compressor Speed");
     notecard_time_sync();
 
     if (lv_scr_act() == ui_Screen3){
@@ -93,8 +77,7 @@ void loop(){
     if (lv_scr_act() == ui_Screen4){
         display_pid_info();
     }
-    // hal_loop();
-    // M5.update();  //Read the press state of the key. A, B, C
+    // M5.update();  //Read the press state of the key. A, B, C. Probably not needed
 
 
 }
@@ -137,16 +120,5 @@ void poll(){
     qo_vars.last_poll_time = now;
     display_sensor_info();
   }
-}
-
-void lv_timer_1s(lv_timer_t * timer)
-{
-    display_date_time_labels();
-}
-
-void IRAM_ATTR Timer0_ISR()
-{
-    //hardware timer interrupt
-    //currently not used
 }
 

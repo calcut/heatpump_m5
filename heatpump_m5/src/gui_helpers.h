@@ -19,5 +19,7 @@ void display_sensor_info(void);
 void display_pid_info(void);
 void display_date_time_labels(void);
 
+//Timer to update date/time on screen
+void lv_timer_1s(lv_timer_t * timer);
 
 #endif
