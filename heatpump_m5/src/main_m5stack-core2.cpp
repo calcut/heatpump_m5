@@ -9,7 +9,7 @@ void setup() {
     tft_lv_initialization();
     init_disp_driver();
     init_touch_driver();
-    // ui_init();
+    ui_init();
 
 
     M5.Lcd.print("Hello World");
