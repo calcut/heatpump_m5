@@ -48,4 +48,13 @@ lv_obj_set_style_arc_width(ui_Arc1, 15, LV_PART_INDICATOR| LV_STATE_DEFAULT);
 lv_obj_set_style_bg_color(ui_Arc1, lv_color_hex(0xFFFFFF), LV_PART_KNOB | LV_STATE_DEFAULT );
 lv_obj_set_style_bg_opa(ui_Arc1, 0, LV_PART_KNOB| LV_STATE_DEFAULT);
 
+ui_Label_Celsius = lv_label_create(ui_Arc_Group);
+lv_obj_set_width( ui_Label_Celsius, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Label_Celsius, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_align( ui_Label_Celsius, LV_ALIGN_CENTER );
+lv_label_set_text(ui_Label_Celsius,"23C");
+lv_obj_set_style_text_color(ui_Label_Celsius, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_text_opa(ui_Label_Celsius, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_Label_Celsius, &lv_font_montserrat_48, LV_PART_MAIN| LV_STATE_DEFAULT);
+
 }
