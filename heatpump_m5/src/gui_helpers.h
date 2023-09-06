@@ -13,8 +13,10 @@ extern QuickPID compressorPID;
 extern db_variables_t db_vars;
 extern qo_variables_t qo_vars;
 extern env_variables_t env_vars;
+extern SemaphoreHandle_t lvgl_mutex;
 
-void display_notecard_info(void);
+
+void display_notecard_info(void * pvParameters);
 void display_sensor_info(void);
 void display_pid_info(void);
 void display_date_time_labels(void);

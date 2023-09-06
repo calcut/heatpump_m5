@@ -4,8 +4,7 @@ int timer_nc_info = 0;
 int timer_pid_info = 0;
 char text_buffer[64];
 
-// For Date/Time counter in UI
-lv_timer_t * timer_1s = lv_timer_create(lv_timer_1s, 1000, NULL);
+
 
 void lv_timer_1s(lv_timer_t * timer)
 {
@@ -55,68 +54,72 @@ void display_pid_info(){
 }
 
 
-void display_notecard_info(){
-    if (millis() - timer_nc_info > db_vars.nc_info_interval_s * 1000) {
-        timer_nc_info = millis();
+void display_notecard_info(void * pvParameters){
+    while(1){
+        if (lv_scr_act() == ui_Screen3){
+            xSemaphoreTake(lvgl_mutex, portMAX_DELAY);
+            Serial.printf("Notecard info poll\n");
+            lv_obj_add_state(ui_Button3_Refresh, LV_STATE_CHECKED);
+            lv_obj_clear_state(ui_Button3_Refresh, LV_STATE_DISABLED);
 
-        Serial.printf("Notecard info poll\n");
-        lv_obj_add_state(ui_Button3_Refresh, LV_STATE_CHECKED);
-        lv_obj_clear_state(ui_Button3_Refresh, LV_STATE_DISABLED);
-
-    
-        if(notecardManager.connected){
-            lv_label_set_text(ui_LabelConnected, "Connected: Yes");
-        }
-        else{
-            lv_label_set_text(ui_LabelConnected, "Connected: No");
-        }
-        notecardManager.hubGet();
-        lv_timer_handler();
-        notecardManager.cardStatus();
-        lv_timer_handler();
-        notecardManager.getEnvironment();
-        lv_timer_handler();
-        notecardManager.hubStatus();
-        lv_timer_handler();
-        notecardManager.hubSyncStatus();
-        lv_timer_handler();
-        notecardManager.cardWireless();
-        lv_timer_handler();
-
-
-        sprintf(text_buffer, "UID: %s", notecardManager.deviceUID);
-        lv_label_set_text(ui_LabelDevice, text_buffer);
         
-        sprintf(text_buffer, "SN: %s", notecardManager.sn);
-        lv_label_set_text(ui_LabelSerial, text_buffer);
+            if(notecardManager.connected){
+                lv_label_set_text(ui_LabelConnected, "Connected: Yes");
+            }
+            else{
+                lv_label_set_text(ui_LabelConnected, "Connected: No");
+            }
+            notecardManager.hubGet();
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+            notecardManager.cardStatus();
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+            notecardManager.getEnvironment();
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+            notecardManager.hubStatus();
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+            notecardManager.hubSyncStatus();
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+            notecardManager.cardWireless();
+            vTaskDelay(10 / portTICK_PERIOD_MS);
 
-        sprintf(text_buffer, "RSSI: %d dB", notecardManager.rssi);
-        lv_label_set_text(ui_LabelRSSI, text_buffer);
+            sprintf(text_buffer, "UID: %s", notecardManager.deviceUID);
+            lv_label_set_text(ui_LabelDevice, text_buffer);
+            
+            sprintf(text_buffer, "SN: %s", notecardManager.sn);
+            lv_label_set_text(ui_LabelSerial, text_buffer);
 
-        sprintf(text_buffer, "RAT: %s", notecardManager.rat);
-        lv_label_set_text(ui_LabelRat, text_buffer);
+            sprintf(text_buffer, "RSSI: %d dB", notecardManager.rssi);
+            lv_label_set_text(ui_LabelRSSI, text_buffer);
 
-        sprintf(text_buffer, "Band: %s", notecardManager.band);
-        lv_label_set_text(ui_LabelBand, text_buffer);
+            sprintf(text_buffer, "RAT: %s", notecardManager.rat);
+            lv_label_set_text(ui_LabelRat, text_buffer);
 
-        // fill in ui_BarX depending on reported bars
-        if (notecardManager.bars > 0){
-            lv_bar_set_value(ui_Bar1, 100, LV_ANIM_OFF);
-        };
-        if (notecardManager.bars > 1){
-            lv_bar_set_value(ui_Bar2, 100, LV_ANIM_OFF);
-        };
-        if (notecardManager.bars > 2){
-            lv_bar_set_value(ui_Bar3, 100, LV_ANIM_OFF);
-        };
-        if (notecardManager.bars > 3){
-            lv_bar_set_value(ui_Bar4, 100, LV_ANIM_OFF);
-        };
+            sprintf(text_buffer, "Band: %s", notecardManager.band);
+            lv_label_set_text(ui_LabelBand, text_buffer);
 
-        lv_textarea_set_text(ui_TextAreaHubStatus, notecardManager.hub_status);
-        lv_textarea_set_text(ui_TextAreaSyncStatus, notecardManager.hub_sync_status);
-        lv_obj_clear_state(ui_Button3_Refresh, LV_STATE_CHECKED);
-        lv_obj_add_state(ui_Button3_Refresh, LV_STATE_DISABLED);
+            // fill in ui_BarX depending on reported bars
+            if (notecardManager.bars > 0){
+                lv_bar_set_value(ui_Bar1, 100, LV_ANIM_OFF);
+            };
+            if (notecardManager.bars > 1){
+                lv_bar_set_value(ui_Bar2, 100, LV_ANIM_OFF);
+            };
+            if (notecardManager.bars > 2){
+                lv_bar_set_value(ui_Bar3, 100, LV_ANIM_OFF);
+            };
+            if (notecardManager.bars > 3){
+                lv_bar_set_value(ui_Bar4, 100, LV_ANIM_OFF);
+            };
+
+            lv_textarea_set_text(ui_TextAreaHubStatus, notecardManager.hub_status);
+            lv_textarea_set_text(ui_TextAreaSyncStatus, notecardManager.hub_sync_status);
+            lv_obj_clear_state(ui_Button3_Refresh, LV_STATE_CHECKED);
+            lv_obj_add_state(ui_Button3_Refresh, LV_STATE_DISABLED);
+
+            xSemaphoreGive(lvgl_mutex);
+            vTaskDelay(db_vars.nc_info_interval_s*1000 / portTICK_PERIOD_MS);
+        }
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
 
