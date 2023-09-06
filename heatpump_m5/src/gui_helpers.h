@@ -13,15 +13,13 @@ extern QuickPID compressorPID;
 extern db_variables_t db_vars;
 extern qo_variables_t qo_vars;
 extern env_variables_t env_vars;
-extern SemaphoreHandle_t lvgl_mutex;
 
-
-void display_notecard_info(void * pvParameters);
-void display_sensor_info(void);
-void display_pid_info(void);
-void display_date_time_labels(void);
+void display_notecard_info(lv_timer_t * timer);
+void display_sensor_info(lv_timer_t * timer);
+void display_pid_info(lv_timer_t * timer);
+void display_date_time_labels(lv_timer_t * timer);
 
 //Timer to update date/time on screen
-void lv_timer_1s(lv_timer_t * timer);
+// void lv_timer_1s(lv_timer_t * timer);
 
 #endif

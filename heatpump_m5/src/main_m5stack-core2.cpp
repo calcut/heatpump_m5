@@ -33,8 +33,7 @@ db_variables_t db_vars;
 qo_variables_t qo_vars;
 env_variables_t env_vars;
 
-// static mutex_t lvgl_mutex;
-SemaphoreHandle_t lvgl_mutex;
+lv_obj_t * current_screen;
 
 QuickPID compressorPID(
     &qo_vars.tc[0],             //Input
@@ -49,19 +48,19 @@ char buffer[64];
 
 void poll(void * pvParameters);
 void notecard_time_sync(void * pvParameters);
+void notecard_service(void * pvParameters);
 void control(void * pvParameters);
 
 void setup() {
     hal_setup();
 
-
-    lvgl_mutex = xSemaphoreCreateMutex();
-    // Take the mutex
-    xSemaphoreTake(lvgl_mutex, portMAX_DELAY);
+    current_screen = NULL;
 
     // For Date/Time counter in UI
-    lv_timer_t * timer_1s = lv_timer_create(lv_timer_1s, 1000, NULL);
-
+    lv_timer_t * timer_datetime = lv_timer_create(display_date_time_labels, 1000, NULL);
+    lv_timer_t * timer_notecard_info = lv_timer_create(display_notecard_info, db_vars.nc_info_interval_s*1000, NULL);
+    lv_timer_t * timer_sensor_info = lv_timer_create(display_sensor_info, db_vars.poll_interval_ms, NULL);
+    lv_timer_t * timer_pid_info = lv_timer_create(display_pid_info, db_vars.pid_info_interval_s*1000, NULL);
 
     notecardManager.init(NC_UID, NC_MODE, NC_INBOUND, NC_OUTBOUND, NC_SYNC);
     yottaModule.init();
@@ -100,29 +99,53 @@ void setup() {
     Serial.println( "Setup done" );
 
     xTaskCreate(
-        display_notecard_info, // task function
-        "Notecard Info", // task name
+        notecard_service, // task function
+        "Notecard Service", // task name
         16384, // stack size in bytes
         NULL, // pointer to parameters
         1, // priority
         NULL); // out pointer to task handle
 
-    xSemaphoreGive(lvgl_mutex);
     Serial.println( "Setup done" );
 
 }
 
 void loop(){
 
-    xSemaphoreTake(lvgl_mutex, portMAX_DELAY);
+    current_screen = lv_scr_act();
     lv_timer_handler();
-    xSemaphoreGive(lvgl_mutex);
     
     // notecard_time_sync();
 
     // M5.update();  //Read the press state of the key. A, B, C. Probably not needed
 
 
+}
+
+void notecard_service(void * pvParameters){
+    while(1){
+
+        if (current_screen == ui_Screen3){
+            Serial.printf("Notecard info service\n");
+
+            notecardManager.hubGet();
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+            notecardManager.cardStatus();
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+            notecardManager.getEnvironment();
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+            notecardManager.hubStatus();
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+            notecardManager.hubSyncStatus();
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+            notecardManager.cardWireless();
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+
+
+            vTaskDelay(db_vars.nc_info_interval_s*1000 / portTICK_PERIOD_MS);
+        }
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+    }
 }
 
 
@@ -149,10 +172,6 @@ void notecard_time_sync(void * pvParameters){
 void control(void * pvParameters){
     while(1){
         compressorPID.Compute();
-
-        if (lv_scr_act() == ui_Screen4){
-            display_pid_info();
-        }
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
     
@@ -165,7 +184,6 @@ void poll(void * pvParameters){
         time_t now;
         time(&now);
         qo_vars.last_poll_time = now;
-        display_sensor_info();
         vTaskDelay(db_vars.poll_interval_ms / portTICK_PERIOD_MS);
     }
     
