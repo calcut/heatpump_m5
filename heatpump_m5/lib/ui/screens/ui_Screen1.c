@@ -24,6 +24,18 @@ lv_obj_set_style_bg_color(ui_Arc_Group, lv_color_hex(0xFFFFFF), LV_PART_MAIN | L
 lv_obj_set_style_bg_opa(ui_Arc_Group, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_border_width(ui_Arc_Group, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
 
+ui_Label2 = lv_label_create(ui_Arc_Group);
+lv_obj_set_width( ui_Label2, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_Label2, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_Label2, -113 );
+lv_obj_set_y( ui_Label2, 11 );
+lv_obj_set_align( ui_Label2, LV_ALIGN_TOP_MID );
+lv_label_set_text(ui_Label2,"Set\nPoint");
+lv_obj_set_style_text_color(ui_Label2, lv_color_hex(0xD2CDC8), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_text_opa(ui_Label2, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_align(ui_Label2, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_Label2, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_DEFAULT);
+
 ui_Arc1 = lv_arc_create(ui_Arc_Group);
 lv_obj_set_width( ui_Arc1, 200);
 lv_obj_set_height( ui_Arc1, 200);
@@ -52,7 +64,7 @@ ui_Label_Celsius = lv_label_create(ui_Arc_Group);
 lv_obj_set_width( ui_Label_Celsius, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_Label_Celsius, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_align( ui_Label_Celsius, LV_ALIGN_CENTER );
-lv_label_set_text(ui_Label_Celsius,"23C");
+lv_label_set_text(ui_Label_Celsius,"23°");
 lv_obj_set_style_text_color(ui_Label_Celsius, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label_Celsius, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_Label_Celsius, &lv_font_montserrat_48, LV_PART_MAIN| LV_STATE_DEFAULT);
