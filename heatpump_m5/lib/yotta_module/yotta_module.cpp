@@ -11,7 +11,6 @@ void YottaModule::readTC_float(float_t tc[8]) {
     if (ModbusRTUClient.requestFrom(slave_id, HOLDING_REGISTERS,
                                 736, 16)) {  //ABCD
 
-        // float_t tc[8];
         for (int i = 0; i < 8; i++) {
             byte byte_array[4];
             uint16_t msbs = ModbusRTUClient.read();
@@ -23,8 +22,8 @@ void YottaModule::readTC_float(float_t tc[8]) {
 
             // Convert to float and print
             memcpy(&tc[i], &byte_array, 4);
-            Serial.printf("TC[%i]: ", i);
-            Serial.println(tc[i]);
+            // Serial.printf("TC[%i]: ", i);
+            // Serial.println(tc[i]);
         }
     }
 }

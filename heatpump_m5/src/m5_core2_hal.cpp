@@ -3,7 +3,6 @@
 
 #include <M5Core2.h>
 #include <lvgl.h>
-// #include <ui.h>
 #include <ArduinoRS485.h>
 
 #include "ui_init.h"
@@ -38,16 +37,5 @@ void hal_setup() {
 
 
     Serial.println( "HAL Setup done" );
-
-}
-
-void hal_loop(){ 
-
-    // M5.update();  //Read the press state of the key. A, B, C
-    // lv_task_handler();
-    // lv_timer_handler();
-    // lv_task_handler();
-
-
 
 }

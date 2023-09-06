@@ -1,15 +1,26 @@
 #include <gui_helpers.h>
 
-// int timer_nc_info = 0;
-// int timer_pid_info = 0;
 char text_buffer[64];
 
+void setup_gui_timers(){
 
+    lv_timer_t * timer_datetime = lv_timer_create(display_date_time_labels, 1000, NULL);
+    lv_timer_t * timer_notecard_info = lv_timer_create(display_notecard_info, 1000, NULL);
+    lv_timer_t * timer_sensor_info = lv_timer_create(display_sensor_info, 1000, NULL);
+    lv_timer_t * timer_pid_info = lv_timer_create(display_pid_info, 1000, NULL);
 
-// void lv_timer_1s(lv_timer_t * timer)
-// {
-//     display_date_time_labels();
-// }
+    lv_obj_add_event_cb(ui_Screen3, nc_info_screen_event_cb, LV_EVENT_SCREEN_LOAD_START, NULL);
+    lv_obj_add_event_cb(ui_Screen3, nc_info_screen_event_cb, LV_EVENT_SCREEN_UNLOAD_START, NULL);
+}
+
+void nc_info_screen_event_cb(lv_event_t * event){
+    if(event->code == LV_EVENT_SCREEN_LOAD_START){
+        nc_service_enable = true;
+    }
+    else if(event->code == LV_EVENT_SCREEN_UNLOAD_START){
+        nc_service_enable = false;
+    }
+}
 
 void display_pid_info(lv_timer_t * timer){
     if (lv_scr_act() == ui_Screen4){
@@ -54,10 +65,7 @@ void display_pid_info(lv_timer_t * timer){
 
 
 void display_notecard_info(lv_timer_t * timer){
-    if (lv_scr_act() == ui_Screen3){
-        // lv_obj_add_state(ui_Button3_Refresh, LV_STATE_CHECKED);
-        // lv_obj_clear_state(ui_Button3_Refresh, LV_STATE_DISABLED);
-    
+    if (lv_scr_act() == ui_Screen3){    
         if(notecardManager.connected){
             lv_label_set_text(ui_LabelConnected, "Connected: Yes");
         }
@@ -96,8 +104,14 @@ void display_notecard_info(lv_timer_t * timer){
 
         lv_textarea_set_text(ui_TextAreaHubStatus, notecardManager.hub_status);
         lv_textarea_set_text(ui_TextAreaSyncStatus, notecardManager.hub_sync_status);
-        // lv_obj_clear_state(ui_Button3_Refresh, LV_STATE_CHECKED);
-        // lv_obj_add_state(ui_Button3_Refresh, LV_STATE_DISABLED);
+
+        if (nc_service_tick){
+            lv_obj_clear_state(ui_Button3_Refresh, LV_STATE_CHECKED);
+            lv_obj_add_state(ui_Button3_Refresh, LV_STATE_DISABLED);
+        } else {
+            lv_obj_clear_state(ui_Button3_Refresh, LV_STATE_DISABLED);
+            lv_obj_add_state(ui_Button3_Refresh, LV_STATE_CHECKED);
+        }
     }
 }
 
