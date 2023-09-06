@@ -28,10 +28,7 @@ extern "C" {
 void ui_Screen1_screen_init(void);
 extern lv_obj_t *ui_Screen1;
 extern lv_obj_t *ui_Arc_Group;
-extern lv_obj_t *ui_Label2;
 extern lv_obj_t *ui_Arc1;
-extern lv_obj_t *ui_Label_Celsius;
-extern lv_obj_t *ui_Fan_Speed_Control;
 extern lv_obj_t *ui____initial_actions0;
 
 LV_FONT_DECLARE( ui_font_Number);
