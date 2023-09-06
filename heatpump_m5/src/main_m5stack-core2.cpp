@@ -2,7 +2,7 @@
 #include <ui.h>
 // #include <QuickPID.h>
 
-#include "m5_core2_hal.h"
+// #include "m5_core2_hal.h"
 // #include "notecard_manager.h"
 // #include "yotta_module.h"
 // #include "gui_helpers.h"
@@ -44,7 +44,11 @@
 // char buffer[64];
 
 void setup() {
-    hal_setup();
+    M5.begin(true, true, true, true, kMBusModeInput);  //Init M5Core2.
+    // M5.begin(true, true, true, true, kMBusModeOutput);  //Init M5Core2.
+    M5.Lcd.print("Hello World");
+
+    // hal_setup();
 
     // // Start the display before notecard etc
     // lv_timer_handler();
