@@ -11,11 +11,7 @@
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
 lv_obj_t *ui_Screen1;
-lv_obj_t *ui_Arc_Group;
 lv_obj_t *ui_Label2;
-lv_obj_t *ui_Arc1;
-lv_obj_t *ui_Label_Celsius;
-lv_obj_t *ui_Fan_Speed_Control;
 lv_obj_t *ui____initial_actions0;
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////
