@@ -57,4 +57,44 @@ lv_obj_set_style_text_color(ui_Label_Celsius, lv_color_hex(0xFFFFFF), LV_PART_MA
 lv_obj_set_style_text_opa(ui_Label_Celsius, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_Label_Celsius, &lv_font_montserrat_48, LV_PART_MAIN| LV_STATE_DEFAULT);
 
+ui_Fan_Speed_Control = lv_slider_create(ui_Screen1);
+lv_slider_set_value( ui_Fan_Speed_Control, 50, LV_ANIM_OFF);
+if (lv_slider_get_mode(ui_Fan_Speed_Control)==LV_SLIDER_MODE_RANGE ) lv_slider_set_left_value( ui_Fan_Speed_Control, 0, LV_ANIM_OFF);
+lv_obj_set_width( ui_Fan_Speed_Control, 10);
+lv_obj_set_height( ui_Fan_Speed_Control, 180);
+lv_obj_set_x( ui_Fan_Speed_Control, 140 );
+lv_obj_set_y( ui_Fan_Speed_Control, 41 );
+lv_obj_set_align( ui_Fan_Speed_Control, LV_ALIGN_TOP_MID );
+lv_obj_set_style_bg_color(ui_Fan_Speed_Control, lv_color_hex(0x0F1215), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_Fan_Speed_Control, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_outline_color(ui_Fan_Speed_Control, lv_color_hex(0x1E242D), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_outline_opa(ui_Fan_Speed_Control, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_outline_width(ui_Fan_Speed_Control, 10, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_outline_pad(ui_Fan_Speed_Control, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+lv_obj_set_style_bg_color(ui_Fan_Speed_Control, lv_color_hex(0x37B9F5), LV_PART_INDICATOR | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_Fan_Speed_Control, 255, LV_PART_INDICATOR| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_grad_color(ui_Fan_Speed_Control, lv_color_hex(0x1464F0), LV_PART_INDICATOR | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_grad_dir(ui_Fan_Speed_Control, LV_GRAD_DIR_HOR, LV_PART_INDICATOR| LV_STATE_DEFAULT);
+
+lv_obj_set_style_bg_color(ui_Fan_Speed_Control, lv_color_hex(0x5F6464), LV_PART_KNOB | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_Fan_Speed_Control, 255, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_bg_grad_color(ui_Fan_Speed_Control, lv_color_hex(0x3C424B), LV_PART_KNOB | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_grad_dir(ui_Fan_Speed_Control, LV_GRAD_DIR_VER, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_outline_color(ui_Fan_Speed_Control, lv_color_hex(0x373C46), LV_PART_KNOB | LV_STATE_DEFAULT );
+lv_obj_set_style_outline_opa(ui_Fan_Speed_Control, 255, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_outline_width(ui_Fan_Speed_Control, 2, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_outline_pad(ui_Fan_Speed_Control, 0, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_shadow_color(ui_Fan_Speed_Control, lv_color_hex(0x000000), LV_PART_KNOB | LV_STATE_DEFAULT );
+lv_obj_set_style_shadow_opa(ui_Fan_Speed_Control, 150, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_shadow_width(ui_Fan_Speed_Control, 20, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_shadow_spread(ui_Fan_Speed_Control, 2, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_pad_left(ui_Fan_Speed_Control, 10, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_pad_right(ui_Fan_Speed_Control, 10, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_pad_top(ui_Fan_Speed_Control, 10, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_pad_bottom(ui_Fan_Speed_Control, 10, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_border_color(ui_Fan_Speed_Control, lv_color_hex(0x0096FF), LV_PART_KNOB | LV_STATE_PRESSED );
+lv_obj_set_style_border_opa(ui_Fan_Speed_Control, 255, LV_PART_KNOB| LV_STATE_PRESSED);
+lv_obj_set_style_border_width(ui_Fan_Speed_Control, 4, LV_PART_KNOB| LV_STATE_PRESSED);
+
 }
