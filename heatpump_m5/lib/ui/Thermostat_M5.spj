@@ -1221,12 +1221,6 @@
                             "strtype": "_style/Text_Align",
                             "strval": "CENTER",
                             "InheritedType": 3
-                          },
-                          {
-                            "nid": -2010822001,
-                            "strtype": "_style/Text_Font",
-                            "strval": "montserrat_16",
-                            "InheritedType": 3
                           }
                         ],
                         "InheritedType": 1
@@ -3157,12 +3151,6 @@
                         "nid": -1205865083,
                         "strtype": "_style/Text_Align",
                         "strval": "CENTER",
-                        "InheritedType": 3
-                      },
-                      {
-                        "nid": 2070131008,
-                        "strtype": "_style/Text_Font",
-                        "strval": "montserrat_16",
                         "InheritedType": 3
                       }
                     ],
@@ -23398,8 +23386,7 @@
                 "InheritedType": 11
               }
             ],
-            "saved_objtypeKey": "PANEL",
-            "tree_closed": true
+            "saved_objtypeKey": "PANEL"
           },
           {
             "guid": "GUID65355512-123361S332240",
@@ -28797,12 +28784,6 @@
                           255
                         ],
                         "InheritedType": 7
-                      },
-                      {
-                        "nid": -159107281,
-                        "strtype": "_style/Text_Font",
-                        "strval": "montserrat_16",
-                        "InheritedType": 3
                       }
                     ],
                     "InheritedType": 1
@@ -29682,12 +29663,6 @@
                           255
                         ],
                         "InheritedType": 7
-                      },
-                      {
-                        "nid": 486072266,
-                        "strtype": "_style/Text_Font",
-                        "strval": "montserrat_16",
-                        "InheritedType": 3
                       }
                     ],
                     "InheritedType": 1
@@ -30281,12 +30256,6 @@
                           255
                         ],
                         "InheritedType": 7
-                      },
-                      {
-                        "nid": -762571372,
-                        "strtype": "_style/Text_Font",
-                        "strval": "montserrat_16",
-                        "InheritedType": 3
                       }
                     ],
                     "InheritedType": 1
@@ -31452,12 +31421,6 @@
                           255
                         ],
                         "InheritedType": 7
-                      },
-                      {
-                        "nid": -555231631,
-                        "strtype": "_style/Text_Font",
-                        "strval": "montserrat_16",
-                        "InheritedType": 3
                       }
                     ],
                     "InheritedType": 1
@@ -31765,12 +31728,6 @@
                           255
                         ],
                         "InheritedType": 7
-                      },
-                      {
-                        "nid": 1072793909,
-                        "strtype": "_style/Text_Font",
-                        "strval": "montserrat_16",
-                        "InheritedType": 3
                       }
                     ],
                     "InheritedType": 1
@@ -32078,12 +32035,6 @@
                           255
                         ],
                         "InheritedType": 7
-                      },
-                      {
-                        "nid": 900790088,
-                        "strtype": "_style/Text_Font",
-                        "strval": "montserrat_16",
-                        "InheritedType": 3
                       }
                     ],
                     "InheritedType": 1
@@ -32391,12 +32342,6 @@
                           255
                         ],
                         "InheritedType": 7
-                      },
-                      {
-                        "nid": -363724827,
-                        "strtype": "_style/Text_Font",
-                        "strval": "montserrat_16",
-                        "InheritedType": 3
                       }
                     ],
                     "InheritedType": 1
@@ -32680,7 +32625,7 @@
     "theme_color2": 0,
     "exportFolderPath": "Y:\\heatpump_m5\\lib\\ui",
     "projectExportFolderPath": "",
-    "backup_cnt": 940,
+    "backup_cnt": 941,
     "autosave_cnt": 0,
     "lvgl_version": "8.3.6",
     "callfuncsexport": "C_FILE",

@@ -198,7 +198,6 @@ lv_obj_set_y( ui_Label4_Error_val, 120 );
 lv_label_set_text(ui_Label4_Error_val,"--.-");
 lv_obj_set_style_text_color(ui_Label4_Error_val, lv_color_hex(0xD2CDC8), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label4_Error_val, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_text_font(ui_Label4_Error_val, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_Label4_Output = lv_label_create(ui_Screen4);
 lv_obj_set_width( ui_Label4_Output, LV_SIZE_CONTENT);  /// 1
@@ -222,7 +221,6 @@ lv_obj_set_y( ui_Label4_Setpoint_val, 110 );
 lv_label_set_text(ui_Label4_Setpoint_val,"--.-");
 lv_obj_set_style_text_color(ui_Label4_Setpoint_val, lv_color_hex(0xD2CDC8), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label4_Setpoint_val, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_text_font(ui_Label4_Setpoint_val, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_Label4_Input = lv_label_create(ui_Screen4);
 lv_obj_set_width( ui_Label4_Input, LV_SIZE_CONTENT);  /// 1
@@ -239,7 +237,6 @@ lv_obj_set_y( ui_Label4_Input_val, 170 );
 lv_label_set_text(ui_Label4_Input_val,"--.-");
 lv_obj_set_style_text_color(ui_Label4_Input_val, lv_color_hex(0xD2CDC8), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label4_Input_val, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_text_font(ui_Label4_Input_val, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_Label4_Pterm = lv_label_create(ui_Screen4);
 lv_obj_set_width( ui_Label4_Pterm, LV_SIZE_CONTENT);  /// 1
@@ -270,7 +267,6 @@ lv_obj_set_y( ui_Label4_Iterm_val, 120 );
 lv_label_set_text(ui_Label4_Iterm_val,"--.-");
 lv_obj_set_style_text_color(ui_Label4_Iterm_val, lv_color_hex(0xD2CDC8), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label4_Iterm_val, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_text_font(ui_Label4_Iterm_val, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_Label4_Output_val = lv_label_create(ui_Screen4);
 lv_obj_set_width( ui_Label4_Output_val, LV_SIZE_CONTENT);  /// 1
@@ -280,7 +276,6 @@ lv_obj_set_y( ui_Label4_Output_val, 120 );
 lv_label_set_text(ui_Label4_Output_val,"--.-");
 lv_obj_set_style_text_color(ui_Label4_Output_val, lv_color_hex(0xD2CDC8), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label4_Output_val, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_text_font(ui_Label4_Output_val, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_Label4_Pterm_val = lv_label_create(ui_Screen4);
 lv_obj_set_width( ui_Label4_Pterm_val, LV_SIZE_CONTENT);  /// 1
@@ -290,7 +285,6 @@ lv_obj_set_y( ui_Label4_Pterm_val, 60 );
 lv_label_set_text(ui_Label4_Pterm_val,"--.-");
 lv_obj_set_style_text_color(ui_Label4_Pterm_val, lv_color_hex(0xD2CDC8), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label4_Pterm_val, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_text_font(ui_Label4_Pterm_val, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_Label4_Dterm_val = lv_label_create(ui_Screen4);
 lv_obj_set_width( ui_Label4_Dterm_val, LV_SIZE_CONTENT);  /// 1
@@ -300,7 +294,6 @@ lv_obj_set_y( ui_Label4_Dterm_val, 180 );
 lv_label_set_text(ui_Label4_Dterm_val,"--.-");
 lv_obj_set_style_text_color(ui_Label4_Dterm_val, lv_color_hex(0xD2CDC8), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_text_opa(ui_Label4_Dterm_val, 255, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_text_font(ui_Label4_Dterm_val, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 lv_obj_add_event_cb(ui_Button4a, ui_event_Button4a, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_Button4c, ui_event_Button4c, LV_EVENT_ALL, NULL);
