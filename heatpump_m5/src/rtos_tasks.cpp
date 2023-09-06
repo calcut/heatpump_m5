@@ -1,6 +1,9 @@
 #include "rtos_tasks.h"
 
+SemaphoreHandle_t nc_mutex = xSemaphoreCreateMutex();
+
 void setup_rtos_tasks(void){
+
     xTaskCreate(
         poll, // task function
         "Poll Yotta Module", // task name
@@ -55,7 +58,7 @@ void notecard_service(void * pvParameters){
 
         if (nc_service_enable){
             Serial.printf("Notecard info service\n");
-
+            xSemaphoreTake(nc_mutex, portMAX_DELAY);
             notecardManager.hubGet();
             vTaskDelay(10 / portTICK_PERIOD_MS);
             notecardManager.cardStatus();
@@ -70,6 +73,8 @@ void notecard_service(void * pvParameters){
             vTaskDelay(10 / portTICK_PERIOD_MS);
 
             nc_service_tick = !nc_service_tick;
+            xSemaphoreGive(nc_mutex);
+
             vTaskDelay(db_vars.nc_info_interval_s*1000 / portTICK_PERIOD_MS);
         }
         vTaskDelay(100 / portTICK_PERIOD_MS);
@@ -78,21 +83,20 @@ void notecard_service(void * pvParameters){
 
 void notecard_time_sync(void * pvParameters){
   while(1) {
+    xSemaphoreTake(nc_mutex, portMAX_DELAY);
     notecardManager.cardStatus();
-    // lv_timer_handler();
 
     if(notecardManager.connected){
         Serial.printf("Notecard time sync\n");
 
         notecardManager.getTime();
-        // lv_timer_handler();
         setRTC(notecardManager.epoch_time, notecardManager.utc_offset_minutes);
     }
     else{
         Serial.printf("Notecard not connected, skipping time sync\n");
     }
+    xSemaphoreGive(nc_mutex);
     vTaskDelay(db_vars.nc_time_sync_interval_s*1000 / portTICK_PERIOD_MS);
-
   }
 }
 
