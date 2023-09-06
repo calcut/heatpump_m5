@@ -15,7 +15,7 @@ void setup() {
     M5.Lcd.print("Hello World");
 
 
-    Serial.println( "Setup done" );
+    Serial.println( "Setup\ndone" );
 }
 
 void loop(){
