@@ -37,7 +37,7 @@ bool nc_service_tick = false;
 QuickPID compressorPID(
     &qo_vars.tc[0],             //Input
     &qo_vars.compressor_speed,  //Output
-    &db_vars.setpoint          //Setpoint
+    &db_vars.dhw_setpoint          //Setpoint
 );   
 
 

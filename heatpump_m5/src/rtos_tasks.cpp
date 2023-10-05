@@ -30,6 +30,14 @@ void setup_rtos_tasks(void){
         NULL); // out pointer to task handle
 
     xTaskCreate(
+        state_machine, // task function
+        "State Machine", // task name
+        16384, // stack size in bytes
+        NULL, // pointer to parameters
+        1, // priority
+        NULL); // out pointer to task handle
+
+    xTaskCreate(
         notecard_service, // task function
         "Notecard Service", // task name
         16384, // stack size in bytes
@@ -106,6 +114,60 @@ void control(void * pvParameters){
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
     
+}
+
+bool check_limits(){
+    // Check if the compressor speed is within limits etc
+    return true;
+}
+
+
+
+void state_machine(void * pvParameters){
+    while(1){
+        vTaskDelay(100 / portTICK_PERIOD_MS);
+
+        if(db_vars.enabled == false){
+            db_vars.mode = STANDBY;
+            continue;
+        }
+
+        if(check_limits() == false){
+            // Add logging or error handling
+            db_vars.enabled = false;
+            db_vars.mode = ERROR;
+            continue;
+        }
+
+        if(qo_vars.tw_dhw > db_vars.dhw_setpoint){
+            //DHW is above setpoint, no heating requested
+            db_vars.mode = STANDBY;
+            continue;
+        }
+
+        if(db_vars.mode == DEFROST){
+            //This means a defrost timer is still running
+            continue;
+        }
+
+        if(qo_vars.t_ambient < env_vars.defrost_thr_ambient){
+            //Ambient temperature is below defrost threshold
+            //Start defrost timer
+            db_vars.mode = DEFROST;
+            continue;
+        }
+
+        if(qo_vars.tw_flex > db_vars.thr_flex){
+            //Flex store is above threshold
+            db_vars.mode = DISCHARGING;
+            continue;
+        }
+        if(qo_vars.tw_flex < db_vars.thr_flex){
+            //Flex store is below threshold
+            db_vars.mode = CHARGING;
+            continue;
+        }
+    }
 }
 
 void poll(void * pvParameters){
