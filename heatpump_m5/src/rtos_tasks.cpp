@@ -15,7 +15,7 @@ void setup_rtos_tasks(void){
     xTaskCreate(
         notecard_time_sync, // task function
         "Notecard Time Sync", // task name
-        16384, // stack size in bytes
+        32768, // stack size in bytes
         NULL, // pointer to parameters
         1, // priority
         NULL); // out pointer to task handle
@@ -49,6 +49,14 @@ void setup_rtos_tasks(void){
         gui_service, // task function
         "LVGL GUI Service", // task name
         16384, // stack size in bytes
+        NULL, // pointer to parameters
+        1, // priority
+        NULL); // out pointer to task handle
+
+    xTaskCreate(
+        read_pulses, // task function
+        "Read Pulses", // task name
+        1024, // stack size in bytes
         NULL, // pointer to parameters
         1, // priority
         NULL); // out pointer to task handle
@@ -180,4 +188,68 @@ void poll(void * pvParameters){
         vTaskDelay(db_vars.poll_interval_ms / portTICK_PERIOD_MS);
     }
     
+}
+
+void read_pulses(void *pvParameters)
+{
+    (void)pvParameters;
+
+    pcnt_config_t pcntCh1 = {
+        .pulse_gpio_num = 36,
+        .ctrl_gpio_num = PCNT_PIN_NOT_USED,
+        .lctrl_mode = PCNT_MODE_KEEP,
+        .hctrl_mode = PCNT_MODE_KEEP,
+        .pos_mode = PCNT_COUNT_DIS,
+        .neg_mode = PCNT_COUNT_INC,
+        .counter_h_lim = 32767,
+        .counter_l_lim = -32768,
+        .unit = PCNT_UNIT_0,
+        .channel = PCNT_CHANNEL_0,
+    };
+    pinMode(26, OUTPUT);
+    Serial.begin(115200);
+    Serial.print("Calling unit_config: ");
+    Serial.println(pcnt_unit_config(&pcntCh1));
+    pcnt_counter_clear(PCNT_UNIT_0);
+
+    static int previous_pulse_count = 0;
+    static int previous_pulse_time = 0;
+    static int temp = 0;
+
+    while (true) {
+
+        for (int i = 0; i < 50; i++) {
+            digitalWrite(26, HIGH);
+            vTaskDelay(1 / portTICK_PERIOD_MS);
+            digitalWrite(26, LOW);
+            vTaskDelay(1 / portTICK_PERIOD_MS);
+        }
+
+
+        int16_t counterVal;
+        pcnt_get_counter_value(PCNT_UNIT_0, &counterVal);
+        Serial.print("Counter Value: ");
+        Serial.println(counterVal);
+
+        Serial.print("Time since last pulse: ");
+        Serial.println(millis() - previous_pulse_time);
+
+        Serial.print("previous_pulse_count: ");
+        Serial.println(previous_pulse_count);
+
+        temp = ((counterVal - previous_pulse_count)*1000)/(millis() - previous_pulse_time);
+        Serial.print("temp: ");
+        Serial.println(temp);
+
+        if (millis() - previous_pulse_time != 0){
+            qo_vars.water_flow_pps = ((counterVal - previous_pulse_count)*1000)/(millis() - previous_pulse_time);
+        }
+        Serial.print("PPS: ");
+        Serial.println(qo_vars.water_flow_pps);
+
+        previous_pulse_count = counterVal;
+        previous_pulse_time = millis();
+
+        vTaskDelay(500 / portTICK_PERIOD_MS);
+    }
 }

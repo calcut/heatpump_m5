@@ -26,6 +26,8 @@ typedef struct{
   time_t last_poll_time = 0;
   float compressor_speed = 50.0;
   float fan_speed = 50.0;
+  int water_flow_pps = 0.0;
+  float water_flow_lpm = 0.0;
 } qo_variables_t;
 
 // A struct to cache the values of environment variables.

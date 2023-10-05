@@ -4,6 +4,7 @@
 #include <M5Core2.h>
 #include <QuickPID.h>
 #include <lvgl.h>
+#include <driver/pcnt.h> //ESP32 Pulse counter
 
 #include "rtc_helpers.h"
 #include "yotta_module.h"
@@ -30,6 +31,8 @@ void notecard_service(void * pvParameters);
 void control(void * pvParameters);
 void state_machine(void * pvParameters);
 void gui_service(void * pvParameters);
+void read_pulses(void *pvParameters);
+
 
 // enumerate modes for the heat pump
 // standby: no heating or cooling
