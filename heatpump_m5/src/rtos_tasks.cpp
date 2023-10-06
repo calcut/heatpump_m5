@@ -195,7 +195,7 @@ void read_pulses(void *pvParameters)
     (void)pvParameters;
 
     pcnt_config_t pcntCh1 = {
-        .pulse_gpio_num = 36,
+        .pulse_gpio_num = PIN_PULSE_COUNT,
         .ctrl_gpio_num = PCNT_PIN_NOT_USED,
         .lctrl_mode = PCNT_MODE_KEEP,
         .hctrl_mode = PCNT_MODE_KEEP,

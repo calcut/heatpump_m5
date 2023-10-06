@@ -6,6 +6,7 @@
 #include <lvgl.h>
 #include <driver/pcnt.h> //ESP32 Pulse counter
 
+#include "m5_core2_hal.h"
 #include "rtc_helpers.h"
 #include "yotta_module.h"
 #include "notecard_manager.h"
