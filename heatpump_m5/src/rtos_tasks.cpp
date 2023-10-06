@@ -206,46 +206,21 @@ void read_pulses(void *pvParameters)
         .unit = PCNT_UNIT_0,
         .channel = PCNT_CHANNEL_0,
     };
-    pinMode(26, OUTPUT);
-    Serial.begin(115200);
-    Serial.print("Calling unit_config: ");
-    Serial.println(pcnt_unit_config(&pcntCh1));
+    pcnt_unit_config(&pcntCh1);
     pcnt_counter_clear(PCNT_UNIT_0);
 
     static int previous_pulse_count = 0;
     static int previous_pulse_time = 0;
-    static int temp = 0;
+    int16_t counterVal;
 
     while (true) {
 
-        for (int i = 0; i < 50; i++) {
-            digitalWrite(26, HIGH);
-            vTaskDelay(1 / portTICK_PERIOD_MS);
-            digitalWrite(26, LOW);
-            vTaskDelay(1 / portTICK_PERIOD_MS);
-        }
-
-
-        int16_t counterVal;
         pcnt_get_counter_value(PCNT_UNIT_0, &counterVal);
-        Serial.print("Counter Value: ");
-        Serial.println(counterVal);
-
-        Serial.print("Time since last pulse: ");
-        Serial.println(millis() - previous_pulse_time);
-
-        Serial.print("previous_pulse_count: ");
-        Serial.println(previous_pulse_count);
-
-        temp = ((counterVal - previous_pulse_count)*1000)/(millis() - previous_pulse_time);
-        Serial.print("temp: ");
-        Serial.println(temp);
 
         if (millis() - previous_pulse_time != 0){
             qo_vars.water_flow_pps = ((counterVal - previous_pulse_count)*1000)/(millis() - previous_pulse_time);
+            qo_vars.water_flow_lpm = qo_vars.water_flow_pps * 60 / 4600; //4600 pulses per litre
         }
-        Serial.print("PPS: ");
-        Serial.println(qo_vars.water_flow_pps);
 
         previous_pulse_count = counterVal;
         previous_pulse_time = millis();
