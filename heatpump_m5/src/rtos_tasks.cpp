@@ -1,6 +1,9 @@
 #include "rtos_tasks.h"
 
 SemaphoreHandle_t nc_mutex = xSemaphoreCreateMutex();
+int previous_mode = STANDBY;
+
+TaskHandle_t TaskHandle_Control;
 
 void setup_rtos_tasks(void){
 
@@ -27,7 +30,7 @@ void setup_rtos_tasks(void){
         16384, // stack size in bytes
         NULL, // pointer to parameters
         1, // priority
-        NULL); // out pointer to task handle
+        &TaskHandle_Control); // out pointer to task handle
 
     xTaskCreate(
         state_machine, // task function
@@ -118,7 +121,11 @@ void notecard_time_sync(void * pvParameters){
 
 void control(void * pvParameters){
     while(1){
-        compressorPID.Compute();
+        if (db_vars.enabled == true){
+            compressorPID.Compute();
+            set_compressor_speed(qo_vars.compressor_target_speed);
+        }
+
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
     
@@ -130,10 +137,94 @@ bool check_limits(){
 }
 
 
+void standby_mode(void){
+    if (previous_mode != STANDBY){
+        Serial.printf("Entering standby mode\n");
+        vTaskSuspend(TaskHandle_Control);
+        set_compressor_speed(0); 
+        open_evaporator_valve();
+        close_defrost_valve();
+        set_reversing_valve_forward();
+    }
+}
+
+void discharging_mode(void){
+    if (previous_mode != DISCHARGING){
+        Serial.printf("Entering discharging mode\n");
+        vTaskSuspend(TaskHandle_Control);
+        set_compressor_speed(env_vars.comp_speed_transition); 
+        close_evaporator_valve();
+        close_defrost_valve();
+        set_reversing_valve_reverse();
+        vTaskResume(TaskHandle_Control);
+    }
+}
+
+void charging_mode(void){
+    if (previous_mode != CHARGING){
+        Serial.printf("Entering charging mode\n");
+        vTaskSuspend(TaskHandle_Control);
+        set_compressor_speed(env_vars.comp_speed_transition); 
+        open_evaporator_valve();
+        close_defrost_valve();
+        set_reversing_valve_forward();
+        vTaskResume(TaskHandle_Control);
+    }
+}
+
+void defrost_mode(void){
+    if (previous_mode != DEFROST){
+        Serial.printf("Entering defrost mode\n");
+        vTaskSuspend(TaskHandle_Control);
+        set_compressor_speed(env_vars.comp_speed_transition); 
+        open_evaporator_valve();
+        open_defrost_valve();
+        set_reversing_valve_reverse();
+        vTaskResume(TaskHandle_Control);
+
+
+        // Start defrost Timer here
+    }
+}
+
+void open_evaporator_valve(void){
+    Serial.println("Evaporator valve opened");
+}
+
+void close_evaporator_valve(void){
+    Serial.println("Evaporator valve closed");
+}
+
+void open_defrost_valve(void){
+    Serial.println("Defrost valve opened");
+}
+
+void close_defrost_valve(void){
+    Serial.println("Defrost valve closed");
+}
+
+void set_reversing_valve_forward(void){
+    Serial.println("Reversing valve set to forward");
+}
+
+void set_reversing_valve_reverse(void){
+    Serial.println("Reversing valve set to reverse");
+}
+
+void set_compressor_speed(float percent){
+    Serial.printf("Setting compressor speed: %d%%\n", percent);
+} 
+
+void set_fan_speed(float percent){
+    Serial.printf("Setting fan speed: %d%%\n", percent);
+}
+
 
 void state_machine(void * pvParameters){
     while(1){
         vTaskDelay(100 / portTICK_PERIOD_MS);
+
+        previous_mode = db_vars.mode;
 
         if(db_vars.enabled == false){
             db_vars.mode = STANDBY;
@@ -155,24 +246,27 @@ void state_machine(void * pvParameters){
 
         if(db_vars.mode == DEFROST){
             //This means a defrost timer is still running
+            defrost_mode();
             continue;
         }
 
         if(qo_vars.t_ambient < env_vars.defrost_thr_ambient){
             //Ambient temperature is below defrost threshold
-            //Start defrost timer
             db_vars.mode = DEFROST;
+            defrost_mode();
             continue;
         }
 
         if(qo_vars.tw_flex > db_vars.thr_flex){
             //Flex store is above threshold
             db_vars.mode = DISCHARGING;
+            discharging_mode();
             continue;
         }
         if(qo_vars.tw_flex < db_vars.thr_flex){
             //Flex store is below threshold
             db_vars.mode = CHARGING;
+            charging_mode();
             continue;
         }
     }

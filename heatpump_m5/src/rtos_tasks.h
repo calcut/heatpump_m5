@@ -34,6 +34,21 @@ void state_machine(void * pvParameters);
 void gui_service(void * pvParameters);
 void read_pulses(void *pvParameters);
 
+void standby_mode(void);
+void discharging_mode(void);
+void charging_mode(void);
+void defrost_mode(void);
+
+
+//These might move into the module class
+void open_evaporator_valve(void);
+void close_evaporator_valve(void);
+void open_defrost_valve(void);
+void close_defrost_valve(void);
+void set_reversing_valve_forward(void);
+void set_reversing_valve_reverse(void);
+void set_compressor_speed(float percent); 
+void set_fan_speed(float percent);
 
 // enumerate modes for the heat pump
 // standby: no heating or cooling

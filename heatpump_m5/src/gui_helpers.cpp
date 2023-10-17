@@ -48,7 +48,7 @@ void display_pid_info(lv_timer_t * timer){
         sprintf(text_buffer, "%.3g", compressorPID.GetDterm());
         lv_label_set_text(ui_Label4_Dterm_val, text_buffer);
 
-        sprintf(text_buffer, "%.3g", qo_vars.compressor_speed);
+        sprintf(text_buffer, "%.3g", qo_vars.compressor_read_speed);
         lv_label_set_text(ui_Label4_Output_val, text_buffer);
 
         sprintf(text_buffer, "%.3g", db_vars.dhw_setpoint);
